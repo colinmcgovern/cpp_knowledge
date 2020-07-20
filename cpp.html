@@ -1,0 +1,447 @@
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<h1 id="home">Colin's Personal Encyclopedia For C++ & Object Oriented Programming</h1>
+<li><a href="#abstract_class">Abstract Class</a></li>
+<li>Abstraction</li>
+<li>Constants</li>
+<li>Copy constructor</li>
+<li>Deadlocks</li>
+<li><a href="#threads_vs_processes">Difference between a thread and a process</a></li>
+<li>Difference between static_cast, dynamic_cast, const_cast and reinterpret_cast</li>
+<li>Differences between C and C++</li>
+<li>Differences between references and pointers</li>
+<li>Encapsulation</li>
+<li><a href="#enumerations">Enumerations</a></li>
+<li>Exceptions</li>
+<li>Friend class</li>
+<li>Friend function</li>
+<li>Function overloading vs operator overloading</li>
+<li>function pointer and function object</li>
+<li>Inline function</li>
+<li>Interfaces</li>
+<li>Interitance</li>
+<li>Interitance (include difficult problems of what will the output be)</li>
+<li><a href="#iterators">Iterators</a></li>
+<li>Keywords</li>
+<li>lambda</li>
+<li>linkage</li>
+<li>L-values vs r-values</li>
+<li>Major C++ features</li>
+<li>Malloc() vs new</li>
+<li>Mutexes</li>
+<li>New Features of C++11</li>
+<li>New Features of C++14</li>
+<li>New Features of C++17</li>
+<li>Overloading</li>
+<li>Overridding</li>
+<li>Polymorphism (include difficult problems of what will the output be)</li>
+<li>Producer/ consumer problem</li>
+<li>Public VS Private Inherience</li>
+<li><a href="#raii">RAII</a></li>
+<li>Semaphores</li>
+<li><a href="#shared_pointers">Shared pointers</a></li>
+<li><a href="#smart_pointers">Smart Pointers</a></li>
+<li>static members</li>
+<li>Static vs dynamic polymorphism</li>
+<li>Structure vs class in C++</li>
+<li><a href="#threads">Threads</a></li>
+<li>Type Generics</li>
+<li>Undefined behavior</li>
+<li><a href="#unique_pointers">Unique pointers</a></li>
+<li>Unit testing</li>
+<li>Virtual functions</li>
+<li>volatile</li>
+<li><a href="#weak_pointers">Weak Pointers</a></li>
+<li>What are C++ access specifiers</li>
+<li>What are the main features of OOP</li>
+<li>What is a pointer</li>
+<li>What is continious integration</li>
+<li>What properties does well written code generally have</li>
+<li>Why is polymorphism important to GUIs</li>
+
+<!-- Additional Topics -->
+<!-- std::move -->
+
+<h2 id="abstract_class">Abstract Class</h2>
+<h3>Description</h3>
+A class which cannot be initialized but can be used as a base class. A class needs 
+atleast one pure virtual function to be an abstract class. Pure virtual functions 
+need to be overriden.
+<h3>Example</h3>
+<pre>
+	#include &lt;iostream&gt;
+
+	//This is an abstract class
+	class vehicle{
+	  virtual void honk() = 0; //pure virtual function
+	};
+
+	class car : vehicle{
+	  public:
+	  void honk(){
+	    std::cout << "beep\n";
+	  }
+	};
+
+	class truck : vehicle{
+	  public:
+	  void honk(){
+	    std::cout << "honk\n";
+	  } 
+	};
+
+	int main() {
+
+	  //We cannot instantiate the below class because it is abstract
+	  //vehicle v;
+
+	  car c;
+	  truck t;
+
+	  c.honk();
+	  t.honk();
+	}
+</pre>
+This program outputs:
+<pre>
+	beep
+	honk
+</pre>
+
+<h2 id="threads_vs_processes">Difference between a thread and a process</h2>
+<h3>Description</h3>
+A thread is a sequence of instructions executed concurrently and is part of a process. A process is an instance of a program. Threads are "lighter" than processes. They require less time for context switching and require less resources. Threads share resources, unlike processes. Processes collabrate less with each other compared to threads.
+<h3>Example</h3>
+<pre>
+	#include &lt;iostream&gt;
+	#include &lt;thread&gt;
+	#include &lt;unistd.h&gt; 
+
+	using namespace std;
+
+	const uint NUM_THREADS = 3;
+	pid_t* pid = (pid_t*)malloc(sizeof(pid_t));
+
+	void task1(int id){
+	  printf(&quot;Process #%d, Thread #%dn&quot;,*pid,id);
+	}
+
+	int main(){
+
+	  //fork() creates a new process
+	  pid[0] = fork(); 
+
+	  thread threads[NUM_THREADS];
+
+	  for(int i=0;i&lt;NUM_THREADS;i++){
+	    //thread() creates a new thread
+	    threads[i] = thread(task1, i); 
+	  }
+
+	  for(int i=0;i&lt;NUM_THREADS;i++){
+	    threads[i].join();
+	  }
+	}
+</pre>
+This program outputs:
+<pre>
+	Process #0, Thread #0
+	Process #0, Thread #1
+	Process #1136, Thread #0
+	Process #1136, Thread #2
+	Process #0, Thread #2
+	Process #1136, Thread #1
+</pre>
+
+<h2 id="enumerations">Enumerations</h2>
+<h3>Description</h3>
+A user defined set of named constants. It is a way of associating names with integers.
+<h3>Example</h3>
+<pre>
+	#include &lt;iostream&gt;
+
+	enum temperature {cold, lukewarm, hot};
+	enum direction {East=0, West=180, North=90, South=270};
+
+	int main() {
+	  temperature temp1 = cold;
+	  temperature temp2 = hot;
+
+	  direction direction1 = East;
+	  direction direction2 = South;
+
+	  std::cout &lt;&lt; temp1 &lt;&lt; std::endl;
+	  std::cout &lt;&lt; temp2 &lt;&lt; std::endl;
+	  std::cout &lt;&lt; direction1 &lt;&lt; std::endl;
+	  std::cout &lt;&lt; direction2 &lt;&lt; std::endl;
+	}
+</pre>
+This program outputs:
+<pre>
+	0
+	2
+	0
+	270
+</pre>
+
+<h2 id="iterators">Iterators</h2>
+<h3>Description</h3>
+Any object that points to some element and has the ability to iterate through the 
+elements with the operators "++"(increment) and "*"(dereference).
+<h3>Example</h3>
+<pre>
+	#include &lt;iostream&gt;
+	#include &lt;iterator&gt;
+	#include &lt;vector&gt;
+	#include &lt;deque&gt;
+
+	//This function returns the mean of a iterable container
+	template &lt;class InputIterator, class T&gt; double mean(InputIterator first, InputIterator last, T init){
+
+	  T output = 0;
+	  double count = 0;
+
+	  while (first!=last) {
+	    output += *first;
+	    first++;
+	    count++;
+	  }
+	  return output/count;
+	}
+
+	int main() {
+	  std::vector&lt;int&gt; v = {1,2,3,4};
+	  std::deque&lt;double&gt; d = {5.1,5.2,5.3};
+	  std::cout &lt;&lt; mean(v.begin(),v.end(),0) &lt;&lt; std::endl;
+	  std::cout &lt;&lt; mean(d.begin(),d.end(),0.0) &lt;&lt; std::endl;
+	}
+</pre>
+This program outputs:
+<pre>
+	2.5
+	5.2
+</pre>
+
+<h2 id="raii">RAII</h2>
+<h3>Description</h3>
+Stands for "Resource Acquistion Is Initialization". This is a terrible name for a 
+great concept. A better name for RAII would be "Scope Based Memory Management". 
+The resource allocation is done at initialization by the constructor and the resource 
+deallocation is done at finalization by the destructor. 
+<h3>Example</h3>
+<pre>
+	#include &lt;iostream&gt;
+	#include &lt;memory&gt;
+
+	class true_false_exam{
+	  public:
+	  bool* answers;
+
+	  true_false_exam(){
+	    answers = new bool(100); 
+	    std::cout &lt;&lt; &quot;Created&quot; &lt;&lt; std::endl;
+	  }
+
+	  ~true_false_exam(){
+	    delete (answers);
+	    std::cout &lt;&lt; &quot;Deleted&quot; &lt;&lt; std::endl;
+	  }
+	};
+
+	int main() {
+	  //Unique pointer will automatically call the deconstructor
+	  //once the object is out of scope
+	  std::unique_ptr&lt;true_false_exam&gt; t(new true_false_exam());
+	}
+</pre>
+This program outputs:
+<pre>
+	Created
+	Deleted
+</pre>
+
+<h2 id="smart_pointers">Smart Pointer</h2>
+<h3>Description</h3>
+Similar to a pointer except it has automatic memory management. Once the scope
+of the smart pointer ends, the program knows to destory the pointer. There are currently
+three kinds of smart pointers: "unique_ptr", "shared_ptr", and "weak_ptr". There used
+to be an "auto_ptr", but this was deprecated in c++11 and removed in c++17.
+	<h4 id="unique_pointers">Unique Pointers</h4>
+	Owns and manages another object through a pointer and disposes of it when the
+	pointer goes out of scope. If you try to make a copy of a unique pointer, the
+	compilier will give you an error.
+	<h4 id="shared_pointers">Shared Pointers</h4>
+	Same thing as a unique pointer, except you are allowed to make copies.
+	<h4 id="weak_pointers">Weak Pointers</h4>
+	Smart pointer that has a non-owning("weak") reference to an object that is a
+	shared pointer.
+<h3>Example</h3>
+<pre>
+	#include &lt;iostream&gt;
+	#include &lt;string&gt;
+	#include &lt;memory&gt;
+
+	class named_object{
+
+	  public:
+
+	    std::string name;
+
+	    named_object(std::string n){
+	      name = n;
+	      std::cout &lt;&lt; name &lt;&lt; &quot; created&quot; &lt;&lt; std::endl;
+	    }
+
+	    ~named_object(){
+	      std::cout &lt;&lt; name &lt;&lt; &quot; deleted&quot; &lt;&lt; std::endl;
+	    }
+	};
+
+	int main() {
+	  //The raw pointer is not deleted correctly because it is not "smart"
+	  named_object* raw = new named_object(&quot;raw pointer&quot;); 
+
+	  //The unique, shared, and weak pointers below are deleted correctly
+	  //because they are "smart"
+	  std::unique_ptr&lt;named_object&gt; unique(new named_object(&quot;unique&quot;));
+	  std::shared_ptr&lt;named_object&gt; shared(new named_object(&quot;shared&quot;));
+	  std::shared_ptr&lt;named_object&gt; shared2 = shared;
+	  std::weak_ptr&lt;named_object&gt; weak = shared2;
+	}
+</pre>
+This program outputs:
+<pre>
+	raw pointer created
+	unique created
+	shared created
+	shared deleted
+	unique deleted
+</pre>
+
+<h2 id="threads">Threads</h2>
+<h3>Description</h3>
+A sequence of instructions which can be executed concurrently. Each thread is 
+given a function to run and parameters for its function. A join function is used to
+finish the thread and collect its returned data. Threads have the risks of errors
+due to things like race condidtions. However concurrency can greatly improve the
+run time of your program.
+<h3>Example</h3>
+<pre>
+	#include &lt;iostream&gt;
+	#include &lt;cstdlib&gt;
+	#include &lt;pthread.h&gt;
+
+	using namespace std;
+
+	const uint NUM_THREADS = 5;
+
+	//Data for each thread
+	struct thread_data{
+	  int thread_id;
+	  int input;
+	};
+
+	//Function which each thread will do
+	void *calc_part(void *input) {
+
+	  thread_data* ptr = (thread_data*)input;
+	  int n = ptr-&gt;thread_id;
+	  int m = ptr-&gt;input;
+
+	  int* thread_sum = (int*)malloc(sizeof(int));
+
+	  thread_sum[0] = 1;
+
+	  for(int i=1;i&lt;=m;i++){
+	    if(i%NUM_THREADS == n){
+	      thread_sum[0] *= i;
+	    }
+	  }
+
+	  //Using printf instead to prevent race conditions
+	  printf(&quot;  Thread  #%d returns %dn&quot;,n,thread_sum[0]);
+	  pthread_exit(thread_sum);
+	}
+
+	int factorial(int x){
+
+	  cout &lt;&lt; &quot;Input is &quot; &lt;&lt; x &lt;&lt; endl;
+
+	  if(x==0){
+	    cout &lt;&lt; &quot;Output is 0&quot; &lt;&lt; endl;
+	    return 0;
+	  }
+
+	  int output = 1;
+
+	  pthread_t threads[NUM_THREADS];
+
+	  int** results = (int**)malloc(sizeof(int) * NUM_THREADS);
+
+	  //Setting up the data for each thread
+	  thread_data* thread_datas = (thread_data*)malloc(sizeof(thread_data) * NUM_THREADS);
+	  for(int i = 0; i &lt; NUM_THREADS; i++) {
+	    thread_data d; 
+	    d.thread_id = i;
+	    d.input = x;
+	    thread_datas[i] = d;
+	  }
+
+	  //Starting each thread
+	  for(int i = 0; i &lt; NUM_THREADS; i++) {
+	    pthread_create(&amp;threads[i], NULL, calc_part, &amp;thread_datas[i]);
+	  }
+
+	  //Stopping and collecting data from each thread
+	  for(int i = 0; i &lt; NUM_THREADS; i++) {
+	    pthread_join(threads[i], (void**)&amp;results[i]);
+	    output *= results[i][0];
+	  }
+
+	  cout &lt;&lt; &quot;Output is &quot; &lt;&lt; output &lt;&lt; endl;
+	  return output;
+	}
+
+	int main () {
+	  factorial(1);
+	  factorial(2);
+	  factorial(5);
+	  factorial(10);
+	}
+}
+</pre>
+
+<pre>
+This program outputs:
+<pre>
+	Input is 1
+	  Thread  #1 returns 1
+	  Thread  #2 returns 1
+	  Thread  #0 returns 1
+	  Thread  #3 returns 1
+	  Thread  #4 returns 1
+	Output is 1
+	Input is 2
+	  Thread  #0 returns 1
+	  Thread  #3 returns 1
+	  Thread  #4 returns 1
+	  Thread  #2 returns 2
+	  Thread  #1 returns 1
+	Output is 2
+	Input is 5
+	  Thread  #4 returns 4
+	  Thread  #2 returns 2
+	  Thread  #3 returns 3
+	  Thread  #1 returns 1
+	  Thread  #0 returns 5
+	Output is 120
+	Input is 10
+	  Thread  #2 returns 14
+	  Thread  #1 returns 6
+	  Thread  #0 returns 50
+	  Thread  #3 returns 24
+	  Thread  #4 returns 36
+	Output is 3628800
+</pre>
