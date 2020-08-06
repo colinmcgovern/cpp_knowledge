@@ -75,43 +75,43 @@ atleast one pure virtual function to be an abstract class. Pure virtual function
 need to be overriden.
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
+#include &lt;iostream&gt;
 
-	//This is an abstract class
-	class vehicle{
-	  virtual void honk() = 0; //pure virtual function
-	};
+//This is an abstract class
+class vehicle{
+  virtual void honk() = 0; //pure virtual function
+};
 
-	class car : vehicle{
-	  public:
-	  void honk(){
-	    std::cout << "beep\n";
-	  }
-	};
+class car : vehicle{
+  public:
+  void honk(){
+    std::cout << "beep\n";
+  }
+};
 
-	class truck : vehicle{
-	  public:
-	  void honk(){
-	    std::cout << "honk\n";
-	  } 
-	};
+class truck : vehicle{
+  public:
+  void honk(){
+    std::cout << "honk\n";
+  } 
+};
 
-	int main() {
+int main() {
 
-	  //We cannot instantiate the below class because it is abstract
-	  //vehicle v;
+  //We cannot instantiate the below class because it is abstract
+  //vehicle v;
 
-	  car c;
-	  truck t;
+  car c;
+  truck t;
 
-	  c.honk();
-	  t.honk();
-	}
+  c.honk();
+  t.honk();
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	beep
-	honk
+beep
+honk
 </code></pre>
 
 <h2 id="threads_vs_processes">Difference between a thread and a process</h2>
@@ -119,44 +119,44 @@ This program outputs:
 A thread is a sequence of instructions executed concurrently and is part of a process. A process is an instance of a program. Threads are "lighter" than processes. They require less time for context switching and require less resources. Threads share resources, unlike processes. Processes collabrate less with each other compared to threads.
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
-	#include &lt;thread&gt;
-	#include &lt;unistd.h&gt; 
+#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;unistd.h&gt; 
 
-	using namespace std;
+using namespace std;
 
-	const uint NUM_THREADS = 3;
-	pid_t* pid = (pid_t*)malloc(sizeof(pid_t));
+const uint NUM_THREADS = 3;
+pid_t* pid = (pid_t*)malloc(sizeof(pid_t));
 
-	void task1(int id){
-	  printf(&quot;Process #%d, Thread #%dn&quot;,*pid,id);
-	}
+void task1(int id){
+  printf(&quot;Process #%d, Thread #%dn&quot;,*pid,id);
+}
 
-	int main(){
+int main(){
 
-	  //fork() creates a new process
-	  pid[0] = fork(); 
+  //fork() creates a new process
+  pid[0] = fork(); 
 
-	  thread threads[NUM_THREADS];
+  thread threads[NUM_THREADS];
 
-	  for(int i=0;i&lt;NUM_THREADS;i++){
-	    //thread() creates a new thread
-	    threads[i] = thread(task1, i); 
-	  }
+  for(int i=0;i&lt;NUM_THREADS;i++){
+    //thread() creates a new thread
+    threads[i] = thread(task1, i); 
+  }
 
-	  for(int i=0;i&lt;NUM_THREADS;i++){
-	    threads[i].join();
-	  }
-	}
+  for(int i=0;i&lt;NUM_THREADS;i++){
+    threads[i].join();
+  }
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	Process #0, Thread #0
-	Process #0, Thread #1
-	Process #1136, Thread #0
-	Process #1136, Thread #2
-	Process #0, Thread #2
-	Process #1136, Thread #1
+Process #0, Thread #0
+Process #0, Thread #1
+Process #1136, Thread #0
+Process #1136, Thread #2
+Process #0, Thread #2
+Process #1136, Thread #1
 </code></pre>
 
 <h2 id="enumerations">Enumerations</h2>
@@ -164,30 +164,30 @@ This program outputs:
 A user defined set of named constants. It is a way of associating names with integers.
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
+#include &lt;iostream&gt;
 
-	enum temperature {cold, lukewarm, hot};
-	enum direction {East=0, West=180, North=90, South=270};
+enum temperature {cold, lukewarm, hot};
+enum direction {East=0, West=180, North=90, South=270};
 
-	int main() {
-	  temperature temp1 = cold;
-	  temperature temp2 = hot;
+int main() {
+  temperature temp1 = cold;
+  temperature temp2 = hot;
 
-	  direction direction1 = East;
-	  direction direction2 = South;
+  direction direction1 = East;
+  direction direction2 = South;
 
-	  std::cout &lt;&lt; temp1 &lt;&lt; std::endl;
-	  std::cout &lt;&lt; temp2 &lt;&lt; std::endl;
-	  std::cout &lt;&lt; direction1 &lt;&lt; std::endl;
-	  std::cout &lt;&lt; direction2 &lt;&lt; std::endl;
-	}
+  std::cout &lt;&lt; temp1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; temp2 &lt;&lt; std::endl;
+  std::cout &lt;&lt; direction1 &lt;&lt; std::endl;
+  std::cout &lt;&lt; direction2 &lt;&lt; std::endl;
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	0
-	2
-	0
-	270
+0
+2
+0
+270
 </code></pre>
 
 <h2 id="iterators">Iterators</h2>
@@ -196,36 +196,36 @@ Any object that points to some element and has the ability to iterate through th
 elements with the operators "++"(increment) and "*"(dereference).
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
-	#include &lt;iterator&gt;
-	#include &lt;vector&gt;
-	#include &lt;deque&gt;
+#include &lt;iostream&gt;
+#include &lt;iterator&gt;
+#include &lt;vector&gt;
+#include &lt;deque&gt;
 
-	//This function returns the mean of a iterable container
-	template &lt;class InputIterator, class T&gt; double mean(InputIterator first, InputIterator last, T init){
+//This function returns the mean of a iterable container
+template &lt;class InputIterator, class T&gt; double mean(InputIterator first, InputIterator last, T init){
 
-	  T output = 0;
-	  double count = 0;
+  T output = 0;
+  double count = 0;
 
-	  while (first!=last) {
-	    output += *first;
-	    first++;
-	    count++;
-	  }
-	  return output/count;
-	}
+  while (first!=last) {
+    output += *first;
+    first++;
+    count++;
+  }
+  return output/count;
+}
 
-	int main() {
-	  std::vector&lt;int&gt; v = {1,2,3,4};
-	  std::deque&lt;double&gt; d = {5.1,5.2,5.3};
-	  std::cout &lt;&lt; mean(v.begin(),v.end(),0) &lt;&lt; std::endl;
-	  std::cout &lt;&lt; mean(d.begin(),d.end(),0.0) &lt;&lt; std::endl;
-	}
+int main() {
+  std::vector&lt;int&gt; v = {1,2,3,4};
+  std::deque&lt;double&gt; d = {5.1,5.2,5.3};
+  std::cout &lt;&lt; mean(v.begin(),v.end(),0) &lt;&lt; std::endl;
+  std::cout &lt;&lt; mean(d.begin(),d.end(),0.0) &lt;&lt; std::endl;
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	2.5
-	5.2
+2.5
+5.2
 </code></pre>
 
 <h2 id="lambda_functions">Lambda Functions</h2>
@@ -234,51 +234,51 @@ A function written in line without an identifier. Functions without idenfifiers
 are called "anonymous functions". Anonymous functions can only be invoked once.
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
-	#include &lt;vector&gt;
-	#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
 
-	using namespace std;
+using namespace std;
 
-	typedef struct rectangle{
-	  double width;
-	  double height;
-	} rectangle;
+typedef struct rectangle{
+  double width;
+  double height;
+} rectangle;
 
-	int main(){
+int main(){
 
-	    vector&lt;rectangle&gt; rects;
-	    rectangle r1 = {0,1};
-	    rects.push_back(r1);
-	    rectangle r2 = {3,3};
-	    rects.push_back(r2);
-	    rectangle r3 = {1,2};
-	    rects.push_back(r3);
-	    rectangle r4 = {4,4};
-	    rects.push_back(r4);
-	    rectangle r5 = {2,1};
-	    rects.push_back(r5);
-	    
-	    sort(rects.begin(), rects.end(), [](const rectangle&amp; a, const rectangle&amp; b) -&gt; bool{ 
-	        return a.width * a.height &lt; b.width * b.height; 
-	    }); 
-	    
-	    cout &lt;&lt; &quot;width, height&quot; &lt;&lt; endl;
-	    for(auto &amp;v:rects){
-	        cout &lt;&lt; v.width &lt;&lt; &quot;, &quot; &lt;&lt; v.height &lt;&lt; endl;
-	    }
-	    
-	    return 0;
-	}
+    vector&lt;rectangle&gt; rects;
+    rectangle r1 = {0,1};
+    rects.push_back(r1);
+    rectangle r2 = {3,3};
+    rects.push_back(r2);
+    rectangle r3 = {1,2};
+    rects.push_back(r3);
+    rectangle r4 = {4,4};
+    rects.push_back(r4);
+    rectangle r5 = {2,1};
+    rects.push_back(r5);
+    
+    sort(rects.begin(), rects.end(), [](const rectangle&amp; a, const rectangle&amp; b) -&gt; bool{ 
+        return a.width * a.height &lt; b.width * b.height; 
+    }); 
+    
+    cout &lt;&lt; &quot;width, height&quot; &lt;&lt; endl;
+    for(auto &amp;v:rects){
+        cout &lt;&lt; v.width &lt;&lt; &quot;, &quot; &lt;&lt; v.height &lt;&lt; endl;
+    }
+    
+    return 0;
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	width, height
-	0, 1
-	1, 2
-	2, 1
-	3, 3
-	4, 4
+width, height
+0, 1
+1, 2
+2, 1
+3, 3
+4, 4
 </code></pre>
 
 <h2 id="mutexes">Mutexes</h2>
@@ -288,69 +288,69 @@ exclusive access. They lock when they get to the critical section and unlock onc
 are done with it.
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
-	#include &lt;thread&gt;
-	#include &lt;mutex&gt;
-	#include &lt;unistd.h&gt;
+#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+#include &lt;unistd.h&gt;
 
-	const uint NUM_THREADS = 3;
+const uint NUM_THREADS = 3;
 
-	using namespace std;
+using namespace std;
 
-	mutex m;
+mutex m;
 
-	void hello_without_mutex(uint id) {
-	  cout &lt;&lt; &quot; Hello&quot;;
-	  usleep(1000);
-	  cout &lt;&lt; &quot; I am &quot;;
-	  cout &lt;&lt; id &lt;&lt; endl;
-	}
+void hello_without_mutex(uint id) {
+  cout &lt;&lt; &quot; Hello&quot;;
+  usleep(1000);
+  cout &lt;&lt; &quot; I am &quot;;
+  cout &lt;&lt; id &lt;&lt; endl;
+}
 
-	void hello_with_mutex (uint id) {
-	  lock_guard&lt;std::mutex&gt; g(m); 
-	  cout &lt;&lt; &quot; Hello&quot;;
-	  usleep(1000);
-	  cout &lt;&lt; &quot; I am &quot;;
-	  cout &lt;&lt; id &lt;&lt; endl;
-	}
+void hello_with_mutex (uint id) {
+  lock_guard&lt;std::mutex&gt; g(m); 
+  cout &lt;&lt; &quot; Hello&quot;;
+  usleep(1000);
+  cout &lt;&lt; &quot; I am &quot;;
+  cout &lt;&lt; id &lt;&lt; endl;
+}
 
-	int main() {
+int main() {
 
-	  cout &lt;&lt; &quot;Without Mutexes:&quot; &lt;&lt; endl;
+  cout &lt;&lt; &quot;Without Mutexes:&quot; &lt;&lt; endl;
 
-	   thread threads1[NUM_THREADS];
-	   for(uint i=0;i&lt;NUM_THREADS;i++){
-	     threads1[i] = thread(hello_without_mutex,i);
-	   }
+   thread threads1[NUM_THREADS];
+   for(uint i=0;i&lt;NUM_THREADS;i++){
+     threads1[i] = thread(hello_without_mutex,i);
+   }
 
-	   for(int i=0;i&lt;NUM_THREADS;i++){
-	     threads1[i].join();
-	   }
-	   
-	   cout &lt;&lt; endl;
-	   cout &lt;&lt; &quot;With Mutexes:&quot; &lt;&lt; endl;
+   for(int i=0;i&lt;NUM_THREADS;i++){
+     threads1[i].join();
+   }
+   
+   cout &lt;&lt; endl;
+   cout &lt;&lt; &quot;With Mutexes:&quot; &lt;&lt; endl;
 
-	   thread threads2[NUM_THREADS];
-	   for(uint i=0;i&lt;NUM_THREADS;i++){
-	     threads2[i] = thread(hello_with_mutex,i);
-	   }
+   thread threads2[NUM_THREADS];
+   for(uint i=0;i&lt;NUM_THREADS;i++){
+     threads2[i] = thread(hello_with_mutex,i);
+   }
 
-	   for(int i=0;i&lt;NUM_THREADS;i++){
-	     threads2[i].join();
-	   }
-	}
+   for(int i=0;i&lt;NUM_THREADS;i++){
+     threads2[i].join();
+   }
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	Without Mutexes:
-	 Hello Hello Hello I am 0
-	 I am 2
-	 I am 1
+Without Mutexes:
+ Hello Hello Hello I am 0
+ I am 2
+ I am 1
 
-	With Mutexes:
-	 Hello I am 0
-	 Hello I am 2
-	 Hello I am 1
+With Mutexes:
+ Hello I am 0
+ Hello I am 2
+ Hello I am 1
 </code></pre>
 
 <h2 id="raii">RAII</h2>
@@ -361,34 +361,34 @@ The resource allocation is done at initialization by the constructor and the res
 deallocation is done at finalization by the destructor. 
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
-	#include &lt;memory&gt;
+#include &lt;iostream&gt;
+#include &lt;memory&gt;
 
-	class true_false_exam{
-	  public:
-	  bool* answers;
+class true_false_exam{
+  public:
+  bool* answers;
 
-	  true_false_exam(){
-	    answers = new bool(100); 
-	    std::cout &lt;&lt; &quot;Created&quot; &lt;&lt; std::endl;
-	  }
+  true_false_exam(){
+    answers = new bool(100); 
+    std::cout &lt;&lt; &quot;Created&quot; &lt;&lt; std::endl;
+  }
 
-	  ~true_false_exam(){
-	    delete (answers);
-	    std::cout &lt;&lt; &quot;Deleted&quot; &lt;&lt; std::endl;
-	  }
-	};
+  ~true_false_exam(){
+    delete (answers);
+    std::cout &lt;&lt; &quot;Deleted&quot; &lt;&lt; std::endl;
+  }
+};
 
-	int main() {
-	  //Unique pointer will automatically call the deconstructor
-	  //once the object is out of scope
-	  std::unique_ptr&lt;true_false_exam&gt; t(new true_false_exam());
-	}
+int main() {
+  //Unique pointer will automatically call the deconstructor
+  //once the object is out of scope
+  std::unique_ptr&lt;true_false_exam&gt; t(new true_false_exam());
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	Created
-	Deleted
+Created
+Deleted
 </code></pre>
 
 <h2 id="semaphores">Semaphores</h2>
@@ -404,81 +404,81 @@ Semaphores which are either locked or unlocked are called "binary semaphores". B
 can be used as a mutex.
 <h3>Example</h3>
 <pre><code>
-	// Example program
-	#include &lt;iostream&gt;
-	#include &lt;pthread.h&gt;
-	#include &lt;vector&gt;
-	#include &lt;mutex&gt;
+// Example program
+#include &lt;iostream&gt;
+#include &lt;pthread.h&gt;
+#include &lt;vector&gt;
+#include &lt;mutex&gt;
 
-	using namespace std;
+using namespace std;
 
-	const uint NUM_THREADS = 5;
+const uint NUM_THREADS = 5;
 
-	class semaphore{
-	    
-	    private: 
-	        pthread_mutex_t lock;
-	        pthread_cond_t wait;
-	        int value;
-	        
-	        
-	    public: 
-	    
-	        semaphore(int v){
-	            value = v;
-	            pthread_cond_init(&amp;wait,NULL);
-	            pthread_mutex_init(&amp;lock,NULL);
-	        }
-	        
-	        void P(){
-	            value--;
-	            if(value &lt; 0) {
-	                pthread_cond_wait(&amp;wait,&amp;lock);
-	            }
-	            pthread_mutex_unlock(&amp;lock);
-	        }
-	        
-	        void V(){
-	            pthread_mutex_lock(&amp;lock);
-	            value++;
-	            if(value &lt;= 0) {
-	                pthread_cond_signal(&amp;wait);
-	            }
-	            pthread_mutex_unlock(&amp;lock);
-	        }
+class semaphore{
+    
+    private: 
+        pthread_mutex_t lock;
+        pthread_cond_t wait;
+        int value;
+        
+        
+    public: 
+    
+        semaphore(int v){
+            value = v;
+            pthread_cond_init(&amp;wait,NULL);
+            pthread_mutex_init(&amp;lock,NULL);
+        }
+        
+        void P(){
+            value--;
+            if(value &lt; 0) {
+                pthread_cond_wait(&amp;wait,&amp;lock);
+            }
+            pthread_mutex_unlock(&amp;lock);
+        }
+        
+        void V(){
+            pthread_mutex_lock(&amp;lock);
+            value++;
+            if(value &lt;= 0) {
+                pthread_cond_signal(&amp;wait);
+            }
+            pthread_mutex_unlock(&amp;lock);
+        }
 
-	};
+};
 
-	semaphore* s = new semaphore(2);
+semaphore* s = new semaphore(2);
 
-	void *test_func(void *input) {
-	    
-	    int id = *((int*)(&amp;input));
-	    
-	    printf(&quot;%d is inn&quot;,id);
-	    s-&gt;P();
-	    
-	    for(int wasting_time=0;wasting_time&lt;1000000000*id;wasting_time++);
+void *test_func(void *input) {
+    
+    int id = *((int*)(&amp;input));
+    
+    printf(&quot;%d is inn&quot;,id);
+    s-&gt;P();
+    
+    for(int wasting_time=0;wasting_time&lt;1000000000*id;wasting_time++);
 
-	    s-&gt;V();
-	    printf(&quot;%d is outn&quot;,id);
-	    
-	    return NULL;
-	}
+    s-&gt;V();
+    printf(&quot;%d is outn&quot;,id);
+    
+    return NULL;
+}
 
-	int main(){   
-	    pthread_t threads[NUM_THREADS];
-	    
-	    //Starting each thread
-	    for(uint i = 0; i &lt; NUM_THREADS; i++) {
-	        pthread_create(&amp;threads[i], NULL, test_func, (void*)i);
-	    }
+int main(){   
+    pthread_t threads[NUM_THREADS];
+    
+    //Starting each thread
+    for(uint i = 0; i &lt; NUM_THREADS; i++) {
+        pthread_create(&amp;threads[i], NULL, test_func, (void*)i);
+    }
 
-	    //Stopping and collecting data from each thread
-	    for(uint i = 0; i &lt; NUM_THREADS; i++) {
-	        pthread_join(threads[i], NULL);
-	    }
-	}
+    //Stopping and collecting data from each thread
+    for(uint i = 0; i &lt; NUM_THREADS; i++) {
+        pthread_join(threads[i], NULL);
+    }
+}
 </code></pre>
 This program outputs:
 <pre><code>
@@ -511,45 +511,45 @@ to be an "auto_ptr", but this was deprecated in c++11 and removed in c++17.
 	shared pointer.
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
-	#include &lt;string&gt;
-	#include &lt;memory&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;memory&gt;
 
-	class named_object{
+class named_object{
 
-	  public:
+  public:
 
-	    std::string name;
+    std::string name;
 
-	    named_object(std::string n){
-	      name = n;
-	      std::cout &lt;&lt; name &lt;&lt; &quot; created&quot; &lt;&lt; std::endl;
-	    }
+    named_object(std::string n){
+      name = n;
+      std::cout &lt;&lt; name &lt;&lt; &quot; created&quot; &lt;&lt; std::endl;
+    }
 
-	    ~named_object(){
-	      std::cout &lt;&lt; name &lt;&lt; &quot; deleted&quot; &lt;&lt; std::endl;
-	    }
-	};
+    ~named_object(){
+      std::cout &lt;&lt; name &lt;&lt; &quot; deleted&quot; &lt;&lt; std::endl;
+    }
+};
 
-	int main() {
-	  //The raw pointer is not deleted correctly because it is not "smart"
-	  named_object* raw = new named_object(&quot;raw pointer&quot;); 
+int main() {
+  //The raw pointer is not deleted correctly because it is not "smart"
+  named_object* raw = new named_object(&quot;raw pointer&quot;); 
 
-	  //The unique, shared, and weak pointers below are deleted correctly
-	  //because they are "smart"
-	  std::unique_ptr&lt;named_object&gt; unique(new named_object(&quot;unique&quot;));
-	  std::shared_ptr&lt;named_object&gt; shared(new named_object(&quot;shared&quot;));
-	  std::shared_ptr&lt;named_object&gt; shared2 = shared;
-	  std::weak_ptr&lt;named_object&gt; weak = shared2;
-	}
+  //The unique, shared, and weak pointers below are deleted correctly
+  //because they are "smart"
+  std::unique_ptr&lt;named_object&gt; unique(new named_object(&quot;unique&quot;));
+  std::shared_ptr&lt;named_object&gt; shared(new named_object(&quot;shared&quot;));
+  std::shared_ptr&lt;named_object&gt; shared2 = shared;
+  std::weak_ptr&lt;named_object&gt; weak = shared2;
+}
 </code></pre>
 This program outputs:
 <pre><code>
-	raw pointer created
-	unique created
-	shared created
-	shared deleted
-	unique deleted
+raw pointer created
+unique created
+shared created
+shared deleted
+unique deleted
 </code></pre>
 
 <h2 id="threads">Threads</h2>
@@ -561,119 +561,117 @@ due to things like race condidtions. However concurrency can greatly improve the
 run time of your program.
 <h3>Example</h3>
 <pre><code>
-	#include &lt;iostream&gt;
-	#include &lt;cstdlib&gt;
-	#include &lt;pthread.h&gt;
+#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+#include &lt;pthread.h&gt;
 
-	using namespace std;
+using namespace std;
 
-	const uint NUM_THREADS = 5;
+const uint NUM_THREADS = 5;
 
-	//Data for each thread
-	struct thread_data{
-	  int thread_id;
-	  int input;
-	};
+//Data for each thread
+struct thread_data{
+  int thread_id;
+  int input;
+};
 
-	//Function which each thread will do
-	void *calc_part(void *input) {
+//Function which each thread will do
+void *calc_part(void *input) {
 
-	  thread_data* ptr = (thread_data*)input;
-	  int n = ptr-&gt;thread_id;
-	  int m = ptr-&gt;input;
+  thread_data* ptr = (thread_data*)input;
+  int n = ptr-&gt;thread_id;
+  int m = ptr-&gt;input;
 
-	  int* thread_sum = (int*)malloc(sizeof(int));
+  int* thread_sum = (int*)malloc(sizeof(int));
 
-	  thread_sum[0] = 1;
+  thread_sum[0] = 1;
 
-	  for(int i=1;i&lt;=m;i++){
-	    if(i%NUM_THREADS == n){
-	      thread_sum[0] *= i;
-	    }
-	  }
+  for(int i=1;i&lt;=m;i++){
+    if(i%NUM_THREADS == n){
+      thread_sum[0] *= i;
+    }
+  }
 
-	  //Using printf instead to prevent race conditions
-	  printf(&quot;  Thread  #%d returns %dn&quot;,n,thread_sum[0]);
-	  pthread_exit(thread_sum);
-	}
+  //Using printf instead to prevent race conditions
+  printf(&quot;  Thread  #%d returns %dn&quot;,n,thread_sum[0]);
+  pthread_exit(thread_sum);
+}
 
-	int factorial(int x){
+int factorial(int x){
 
-	  cout &lt;&lt; &quot;Input is &quot; &lt;&lt; x &lt;&lt; endl;
+  cout &lt;&lt; &quot;Input is &quot; &lt;&lt; x &lt;&lt; endl;
 
-	  if(x==0){
-	    cout &lt;&lt; &quot;Output is 0&quot; &lt;&lt; endl;
-	    return 0;
-	  }
+  if(x==0){
+    cout &lt;&lt; &quot;Output is 0&quot; &lt;&lt; endl;
+    return 0;
+  }
 
-	  int output = 1;
+  int output = 1;
 
-	  pthread_t threads[NUM_THREADS];
+  pthread_t threads[NUM_THREADS];
 
-	  int** results = (int**)malloc(sizeof(int) * NUM_THREADS);
+  int** results = (int**)malloc(sizeof(int) * NUM_THREADS);
 
-	  //Setting up the data for each thread
-	  thread_data* thread_datas = (thread_data*)malloc(sizeof(thread_data) * NUM_THREADS);
-	  for(int i = 0; i &lt; NUM_THREADS; i++) {
-	    thread_data d; 
-	    d.thread_id = i;
-	    d.input = x;
-	    thread_datas[i] = d;
-	  }
+  //Setting up the data for each thread
+  thread_data* thread_datas = (thread_data*)malloc(sizeof(thread_data) * NUM_THREADS);
+  for(int i = 0; i &lt; NUM_THREADS; i++) {
+    thread_data d; 
+    d.thread_id = i;
+    d.input = x;
+    thread_datas[i] = d;
+  }
 
-	  //Starting each thread
-	  for(int i = 0; i &lt; NUM_THREADS; i++) {
-	    pthread_create(&amp;threads[i], NULL, calc_part, &amp;thread_datas[i]);
-	  }
+  //Starting each thread
+  for(int i = 0; i &lt; NUM_THREADS; i++) {
+    pthread_create(&amp;threads[i], NULL, calc_part, &amp;thread_datas[i]);
+  }
 
-	  //Stopping and collecting data from each thread
-	  for(int i = 0; i &lt; NUM_THREADS; i++) {
-	    pthread_join(threads[i], (void**)&amp;results[i]);
-	    output *= results[i][0];
-	  }
+  //Stopping and collecting data from each thread
+  for(int i = 0; i &lt; NUM_THREADS; i++) {
+    pthread_join(threads[i], (void**)&amp;results[i]);
+    output *= results[i][0];
+  }
 
-	  cout &lt;&lt; &quot;Output is &quot; &lt;&lt; output &lt;&lt; endl;
-	  return output;
-	}
+  cout &lt;&lt; &quot;Output is &quot; &lt;&lt; output &lt;&lt; endl;
+  return output;
+}
 
-	int main () {
-	  factorial(1);
-	  factorial(2);
-	  factorial(5);
-	  factorial(10);
-	}
+int main () {
+  factorial(1);
+  factorial(2);
+  factorial(5);
+  factorial(10);
 }
 </code></pre>
 
-<pre><code>
 This program outputs:
 <pre><code>
-	Input is 1
-	  Thread  #1 returns 1
-	  Thread  #2 returns 1
-	  Thread  #0 returns 1
-	  Thread  #3 returns 1
-	  Thread  #4 returns 1
-	Output is 1
-	Input is 2
-	  Thread  #0 returns 1
-	  Thread  #3 returns 1
-	  Thread  #4 returns 1
-	  Thread  #2 returns 2
-	  Thread  #1 returns 1
-	Output is 2
-	Input is 5
-	  Thread  #4 returns 4
-	  Thread  #2 returns 2
-	  Thread  #3 returns 3
-	  Thread  #1 returns 1
-	  Thread  #0 returns 5
-	Output is 120
-	Input is 10
-	  Thread  #2 returns 14
-	  Thread  #1 returns 6
-	  Thread  #0 returns 50
-	  Thread  #3 returns 24
-	  Thread  #4 returns 36
-	Output is 3628800
+Input is 1
+  Thread  #1 returns 1
+  Thread  #2 returns 1
+  Thread  #0 returns 1
+  Thread  #3 returns 1
+  Thread  #4 returns 1
+Output is 1
+Input is 2
+  Thread  #0 returns 1
+  Thread  #3 returns 1
+  Thread  #4 returns 1
+  Thread  #2 returns 2
+  Thread  #1 returns 1
+Output is 2
+Input is 5
+  Thread  #4 returns 4
+  Thread  #2 returns 2
+  Thread  #3 returns 3
+  Thread  #1 returns 1
+  Thread  #0 returns 5
+Output is 120
+Input is 10
+  Thread  #2 returns 14
+  Thread  #1 returns 6
+  Thread  #0 returns 50
+  Thread  #3 returns 24
+  Thread  #4 returns 36
+Output is 3628800
 </code></pre>
