@@ -74,8 +74,7 @@ A class which cannot be initialized but can be used as a base class. A class nee
 atleast one pure virtual function to be an abstract class. Pure virtual functions 
 need to be overriden.
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 
 //This is an abstract class
 class vehicle{
@@ -109,8 +108,7 @@ int main() {
 }
 </code></pre>
 This program outputs:
-<pre><code>
-beep
+<pre><code>beep
 honk
 </code></pre>
 
@@ -118,8 +116,7 @@ honk
 <h3>Description</h3>
 A thread is a sequence of instructions executed concurrently and is part of a process. A process is an instance of a program. Threads are "lighter" than processes. They require less time for context switching and require less resources. Threads share resources, unlike processes. Processes collabrate less with each other compared to threads.
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;thread&gt;
 #include &lt;unistd.h&gt; 
 
@@ -150,8 +147,7 @@ int main(){
 }
 </code></pre>
 This program outputs:
-<pre><code>
-Process #0, Thread #0
+<pre><code>Process #0, Thread #0
 Process #0, Thread #1
 Process #1136, Thread #0
 Process #1136, Thread #2
@@ -163,8 +159,7 @@ Process #1136, Thread #1
 <h3>Description</h3>
 A user defined set of named constants. It is a way of associating names with integers.
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 
 enum temperature {cold, lukewarm, hot};
 enum direction {East=0, West=180, North=90, South=270};
@@ -183,8 +178,7 @@ int main() {
 }
 </code></pre>
 This program outputs:
-<pre><code>
-0
+<pre><code>0
 2
 0
 270
@@ -195,8 +189,7 @@ This program outputs:
 Any object that points to some element and has the ability to iterate through the 
 elements with the operators "++"(increment) and "*"(dereference).
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;iterator&gt;
 #include &lt;vector&gt;
 #include &lt;deque&gt;
@@ -223,8 +216,7 @@ int main() {
 }
 </code></pre>
 This program outputs:
-<pre><code>
-2.5
+<pre><code>2.5
 5.2
 </code></pre>
 
@@ -233,8 +225,7 @@ This program outputs:
 A function written in line without an identifier. Functions without idenfifiers 
 are called "anonymous functions". Anonymous functions can only be invoked once.
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;algorithm&gt;
 
@@ -272,8 +263,7 @@ int main(){
 }
 </code></pre>
 This program outputs:
-<pre><code>
-width, height
+<pre><code>width, height
 0, 1
 1, 2
 2, 1
@@ -287,8 +277,7 @@ Lockable objects that are designed to signal when critical sections of code requ
 exclusive access. They lock when they get to the critical section and unlock once they
 are done with it.
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;thread&gt;
 #include &lt;mutex&gt;
 #include &lt;unistd.h&gt;
@@ -341,8 +330,7 @@ int main() {
 }
 </code></pre>
 This program outputs:
-<pre><code>
-Without Mutexes:
+<pre><code>Without Mutexes:
  Hello Hello Hello I am 0
  I am 2
  I am 1
@@ -360,8 +348,7 @@ great concept. A better name for RAII would be "Scope Based Memory Management".
 The resource allocation is done at initialization by the constructor and the resource 
 deallocation is done at finalization by the destructor. 
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;memory&gt;
 
 class true_false_exam{
@@ -386,8 +373,7 @@ int main() {
 }
 </code></pre>
 This program outputs:
-<pre><code>
-Created
+<pre><code>Created
 Deleted
 </code></pre>
 
@@ -403,8 +389,7 @@ Semaphores which allow an arbitrary resource count are called "counting semaphor
 Semaphores which are either locked or unlocked are called "binary semaphores". Binary semaphores
 can be used as a mutex.
 <h3>Example</h3>
-<pre><code>
-// Example program
+<pre><code>// Example program
 #include &lt;iostream&gt;
 #include &lt;pthread.h&gt;
 #include &lt;vector&gt;
@@ -481,8 +466,7 @@ int main(){
 }
 </code></pre>
 This program outputs:
-<pre><code>
-	0 is in
+<pre><code>	0 is in
 	0 is out
 	2 is in
 	4 is in
@@ -510,8 +494,7 @@ to be an "auto_ptr", but this was deprecated in c++11 and removed in c++17.
 	Smart pointer that has a non-owning("weak") reference to an object that is a
 	shared pointer.
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;string&gt;
 #include &lt;memory&gt;
 
@@ -544,8 +527,7 @@ int main() {
 }
 </code></pre>
 This program outputs:
-<pre><code>
-raw pointer created
+<pre><code>raw pointer created
 unique created
 shared created
 shared deleted
@@ -560,8 +542,7 @@ finish the thread and collect its returned data. Threads have the risks of error
 due to things like race condidtions. However concurrency can greatly improve the
 run time of your program.
 <h3>Example</h3>
-<pre><code>
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;cstdlib&gt;
 #include &lt;pthread.h&gt;
 
@@ -645,8 +626,7 @@ int main () {
 </code></pre>
 
 This program outputs:
-<pre><code>
-Input is 1
+<pre><code>Input is 1
   Thread  #1 returns 1
   Thread  #2 returns 1
   Thread  #0 returns 1
