@@ -72,3 +72,9 @@
 .hljs-strong {
   font-weight: bold;
 }
+
+body {
+  color: white;
+  background-color: #111111;
+  font-family: Arial, Helvetica, sans-serif;
+}
