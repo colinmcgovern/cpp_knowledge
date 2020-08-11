@@ -12,7 +12,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <h2>Table of Contents</h2>
 <li><a href="#abstract_class">Abstract Class</a></li>
 <li>Abstraction</li>
-<li>Constants</li>
+<li><a href="#const">Const</a></li>
 <li>Copy constructor</li>
 <li>Deadlocks</li>
 <li><a href="#threads_vs_processes">Difference between a thread and a process</a></li>
@@ -114,6 +114,30 @@ This program outputs:
 <pre><code>beep
 honk
 </code></pre>
+
+<h2 id="const">Const</h2>
+<h3>Description</h3>
+A keyword that specifies that a variable's value is constant and prevents the programmer from modifying it. To make things more complicated, there are also pointers to consts and const pointers. Pointers to const can have thier address change, but not their value. Const pointers can have their values changed, but not their addresses.
+<h3>Example</h3>
+<pre><code>int main(){
+    int a = 1;
+    int b = 2;
+    
+    //Standard const
+    const int test1 = a;
+    //test1 = b; //Not allowed
+    
+    //Pointer to const
+    const int* test2 = &amp;a;
+    test2 = &amp;b; //Allowed
+    //*test2 = b; //Not allowed
+    
+    //Pointer to const
+    int* const test3 = &amp;a;
+    *test3 = b; //Allowed
+    //test3 = &amp;b; //Not allowed    
+}
+<pre><code>
 
 <h2 id="threads_vs_processes">Difference between a thread and a process</h2>
 <h3>Description</h3>
@@ -392,8 +416,7 @@ Semaphores which allow an arbitrary resource count are called "counting semaphor
 Semaphores which are either locked or unlocked are called "binary semaphores". Binary semaphores
 can be used as a mutex.
 <h3>Example</h3>
-<pre><code>// Example program
-#include &lt;iostream&gt;
+<pre><code>#include &lt;iostream&gt;
 #include &lt;pthread.h&gt;
 #include &lt;vector&gt;
 #include &lt;mutex&gt;
