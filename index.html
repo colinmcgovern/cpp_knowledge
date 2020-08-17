@@ -504,6 +504,22 @@ This program outputs:
 	3 is out
 </code></pre>
 
+<h2 id="volatile">Volatile</h2>
+<h3>Description</h3>
+Prevents the addresses from being optimized away. Volatile is needed for embedded development where the hardware device is memory-mapped and memory may change without the compilier knowing.
+<h3>Example</h3>
+<pre><code>int main(){
+    
+    //The compiler may optimize the while loop into &quot;while(true)&quot;
+    int a = 100;
+    while(a == 100){}
+    
+    //The compliler will not &quot;optimize away&quot; the b variable
+    volatile int b = 100;
+    while(b == 100){}
+}	
+</code></pre>
+
 <h2 id="smart_pointers">Smart Pointer</h2>
 <h3>Description</h3>
 Similar to a pointer except it has automatic memory management. Once the scope
