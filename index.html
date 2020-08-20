@@ -45,7 +45,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>Overridding</li>
 <li>Polymorphism (include difficult problems of what will the output be)</li>
 <li>Producer/ consumer problem</li>
-<li>Public VS Private Inherience</li>
+<li><a href="#inherience_types">Public VS Protected VS Private Inherience</li>
 <li><a href="#raii">RAII</a></li>
 <li><a href="#semaphores">Semaphores</a></li>
 <li><a href="#shared_pointers">Shared pointers</a></li>
@@ -367,6 +367,72 @@ With Mutexes:
  Hello I am 2
  Hello I am 1
 </code></pre>
+
+<h2 id="inherience_types">Public VS Protected VS Private Inherience</h2>
+<h3>Description</h3>
+Public inheritance has everything able to access everything of the base class. Protected inheritance only has the children able to access everything of the base class. Private inheritance only allows the parent to have access to everything. Default inheritance is private.
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class public_child{
+    public:
+        string a = &quot;public childred&quot;; 
+};
+
+class protected_child{
+    public:
+        string b = &quot;protected childred&quot;; 
+};
+
+class private_child{
+    public:
+        string c = &quot;private childred&quot;; 
+};
+
+class A : public public_child, protected protected_child, private private_child{
+    
+    public:
+        string get_b(){
+            return b;
+        }
+        
+        string get_c(){
+            return c;
+        }
+        
+};
+
+class B : A {
+    
+    public:
+        string get_a(){
+                return b;
+        }
+        
+        string get_b(){
+                return b;
+        }
+};
+
+int main()
+{
+  A test;
+  cout &lt;&lt; test.a &lt;&lt; &quot; can access directly&quot; &lt;&lt; endl;
+  cout &lt;&lt; test.get_b() &lt;&lt; &quot; and &quot; &lt;&lt; test.get_c() &lt;&lt; &quot; need getters&quot; &lt;&lt; endl;
+  B test2;
+  cout &lt;&lt; test2.get_a() &lt;&lt; &quot; and &quot; &lt;&lt; test2.get_b() 
+  &lt;&lt; &quot; can be printed by children of the base class&quot; &lt;&lt; endl;
+}
+</code></pre>
+This program outputs:
+<pre><code>public childred can access directly
+protected childred and private childred need getters
+protected childred and protected childred can be printed by children of the base class
+</code></pre>
+
 
 <h2 id="raii">RAII</h2>
 <h3>Description</h3>
