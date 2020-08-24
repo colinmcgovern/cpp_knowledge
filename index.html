@@ -26,7 +26,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>Friend function</li>
 <li>Function overloading vs operator overloading</li>
 <li>function pointer and function object</li>
-<li>Inline function</li>
+<li><a href="#inline">Inline function</a></li>
 <li>Interfaces</li>
 <li>Interitance</li>
 <li>Interitance (include difficult problems of what will the output be)</li>
@@ -209,6 +209,54 @@ This program outputs:
 2
 0
 270
+</code></pre>
+
+<h2 id="inline">Inline Functions</h2>
+<h3>Description</h3>
+Forces the compilier to directly replace function calls with the contents of the function. This allows faster runtimes for functions that are small and called often.
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;chrono&gt;
+#include &lt;thread&gt;
+#include &lt;iostream&gt;
+#include &lt;float.h&gt;
+
+using namespace std;
+
+double small_increase(double a){
+    return a*1.00001;
+}    
+
+inline double inline_small_increase(double a){
+    return a*1.00001;
+}    
+
+int main(){
+    
+    double x = 2;
+    double y = 2;
+    
+    auto t1 = chrono::high_resolution_clock::now();
+    while(x &lt; DBL_MAX){
+        x = small_increase(x);
+    }
+    auto t2 = chrono::high_resolution_clock::now();
+    while(y &lt; DBL_MAX){
+        y = inline_small_increase(x);
+    }
+    auto t3 = chrono::high_resolution_clock::now();
+    
+    cout &lt;&lt; &quot;non-inline took &quot;
+              &lt;&lt; chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t2-t1).count()
+              &lt;&lt; &quot; milliseconds&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;inline took &quot;
+              &lt;&lt; chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t3-t2).count()
+              &lt;&lt; &quot; milliseconds&quot; &lt;&lt; endl;
+}
+</code></pre>
+This program outputs:
+<pre><code>non-inline took 132 milliseconds
+inline took 0 milliseconds
 </code></pre>
 
 <h2 id="iterators">Iterators</h2>
