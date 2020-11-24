@@ -187,8 +187,30 @@ Encapsulation is restricting the access to some of an object's components. Genra
 an object's members, we use getters and setters. Encapsulation causes information hiding which signifigantly cuts
 the software's complexity.
 <h3>Example</h3>
-<pre><code>#include &lt;iostream&gt;
-#include<iostream>  using namespace std;    class car{    private:   double speed;     public:   void setSpeed(double a){   speed = a;   }     double getSpeed(){   return speed;   }  };    int main()  {   car c1;   c1.setSpeed(5.5);   cout<< &quot;The car's speed is &quot; << c1.getSpeed();   return 0;  }
+<pre><code>
+#include &lt;iostream&gt;
+using namespace std;
+
+class car{
+  private:
+    double speed;
+  public:
+    void setSpeed(double a){
+      speed = a;
+    }    
+
+    double getSpeed(){ 
+      return speed;   
+    }  
+};    
+
+int main(){
+  car c1;
+  c1.setSpeed(5.5);
+  cout<< &quot;The car's speed is &quot; << c1.getSpeed();
+
+  return 0;  
+}
 </code></pre>
 This program outputs:
 <pre><code>0
