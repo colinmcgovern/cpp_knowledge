@@ -19,7 +19,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>Difference between static_cast, dynamic_cast, const_cast and reinterpret_cast</li>
 <li>Differences between C and C++</li>
 <li>Differences between references and pointers</li>
-<li>Encapsulation</li>
+<li><a href="#encapsulation">Encapsulation</a></li>
 <li><a href="#enumerations">Enumerations</a></li>
 <li>Exceptions</li>
 <li>Friend class</li>
@@ -29,7 +29,6 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li><a href="#inline">Inline function</a></li>
 <li>Interfaces</li>
 <li>Interitance</li>
-<li>Interitance (include difficult problems of what will the output be)</li>
 <li><a href="#iterators">Iterators</a></li>
 <li>Keywords</li>
 <li><a href="#lambda_functions">Lambda Functions</a></li>
@@ -43,7 +42,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>New Features of C++17</li>
 <li>Overloading</li>
 <li>Overridding</li>
-<li>Polymorphism (include difficult problems of what will the output be)</li>
+<li>Polymorphism</li>
 <li>Producer/ consumer problem</li>
 <li><a href="#inherience_types">Public VS Protected VS Private Inherience</li>
 <li><a href="#raii">RAII</a></li>
@@ -62,7 +61,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li><a href="#volatile">Volatile</a></li>
 <li><a href="#weak_pointers">Weak Pointers</a></li>
 <li>What are C++ access specifiers</li>
-<li>What are the main features of OOP</li>
+<li>What are the four principles of OOP</li>
 <li>What is a pointer</li>
 <li>What is continious integration</li>
 <li>What properties does well written code generally have</li>
@@ -180,6 +179,20 @@ Process #1136, Thread #0
 Process #1136, Thread #2
 Process #0, Thread #2
 Process #1136, Thread #1
+</code></pre>
+
+<h2 id="encapsulation">Encapsulation</h2>
+<h3>Description</h3>
+Encapsulation is restricting the access to some of an object's components. Genrally when we want to encapsulate
+an object's members, we use getters and setters. Encapsulation causes information hiding which signifigantly cuts
+the software's complexity.
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include<iostream>  using namespace std;    class car{    private:   double speed;     public:   void setSpeed(double a){   speed = a;   }     double getSpeed(){   return speed;   }  };    int main()  {   car c1;   c1.setSpeed(5.5);   cout<< &quot;The car's speed is &quot; << c1.getSpeed();   return 0;  }
+</code></pre>
+This program outputs:
+<pre><code>0
+The car's speed is 5.5
 </code></pre>
 
 <h2 id="enumerations">Enumerations</h2>
