@@ -42,7 +42,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>New Features of C++17</li>
 <li>Overloading</li>
 <li>Overridding</li>
-<li>Polymorphism</li>
+<li><a href="#polymorphism">Polymorphism</a></li>
 <li>Producer/ consumer problem</li>
 <li><a href="#inherience_types">Public VS Protected VS Private Inherience</li>
 <li><a href="#raii">RAII</a></li>
@@ -50,7 +50,6 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li><a href="#shared_pointers">Shared pointers</a></li>
 <li><a href="#smart_pointers">Smart Pointers</a></li>
 <li>static members</li>
-<li>Static vs dynamic polymorphism</li>
 <li>Structure vs class in C++</li>
 <li><a href="#threads">Threads</a></li>
 <li><a href="#type_generics">Type Generics</a></li>
@@ -447,6 +446,59 @@ With Mutexes:
  Hello I am 0
  Hello I am 2
  Hello I am 1
+</code></pre>
+
+<h2 id="polymorphism">Polymorphism</h2>
+<h3>Description</h3>
+Polymorphism is when a single symbol used to represent multiple types. There are two kinds of polymorphism: static and dynamic. Static polymorphism is compile time and is method overloading. Dynamic polymorphism is run time and is method overriding. 
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+
+using namespace std;
+
+class person{
+    public:
+        virtual void speak(){
+            cout &#x3C;&#x3C; &#x22;Hello&#x22; &#x3C;&#x3C; endl;
+        }
+};
+
+class teacher : public person{
+    public:
+    
+        //Overriden, run-time polymorphism
+        void speak(){
+            cout &#x3C;&#x3C; &#x22;Hello, class!&#x22; &#x3C;&#x3C; endl;
+        }  
+        
+        //Overloaded, compile time polymorphism
+        void speak(string s){
+            cout &#x3C;&#x3C; s &#x3C;&#x3C; endl;
+        }
+};
+
+int main()
+{
+    person* p_ptr;
+    person p;
+    teacher t;
+    
+    p_ptr = &#x26;p;
+    p_ptr-&#x3E;speak();
+    
+    p_ptr = &#x26;t;
+    p_ptr-&#x3E;speak();
+    
+    t.speak(string(&#x22;The lesson is done!&#x22;));
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>Hello
+Hello, class!
+The lesson is done!
 </code></pre>
 
 <h2 id="inherience_types">Public VS Protected VS Private Inherience</h2>
