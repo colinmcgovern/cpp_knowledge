@@ -12,14 +12,15 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <h2>Table of Contents</h2>
 <li><a href="#abstract_class">Abstract Class</a></li>
 <li>Abstraction</li>
+<li><a href="#abstract_class">Abstract Class</a></li>
 <li><a href="#const">Const</a></li>
 <li>Copy constructor</li>
-<li>Deadlocks</li>
+<li><a href="#deadlocks">Deadlocks</a></li>
 <li><a href="#threads_vs_processes">Difference between a thread and a process</a></li>
 <li>Difference between static_cast, dynamic_cast, const_cast and reinterpret_cast</li>
 <li>Differences between C and C++</li>
 <li>Differences between references and pointers</li>
-<li><a href="#encapsulation">Encapsulation</a></li>
+<li>Encapsulation</li>
 <li><a href="#enumerations">Enumerations</a></li>
 <li>Exceptions</li>
 <li>Friend class</li>
@@ -28,18 +29,24 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li><a href="#inline">Inline function</a></li>
 <li>Interfaces</li>
 <li>Interitance</li>
+<li>Interitance (include difficult problems of what will the output be)</li>
 <li><a href="#iterators">Iterators</a></li>
+<li>Keywords</li>
 <li><a href="#lambda_functions">Lambda Functions</a></li>
 <li>linkage</li>
 <li>L-values vs r-values</li>
+<li>Major C++ features</li>
 <li>Malloc() vs new</li>
 <li><a href="#mutexes">Mutexes</a></li>
 <li>New Features of C++11</li>
 <li>New Features of C++14</li>
 <li>New Features of C++17</li>
+<li><a href="#overloading">Overloading</a></li>
+<li><a href="#overridding">Overridding</a></li>
 <li><a href="#polymorphism">Polymorphism</a></li>
 <li>Producer/ consumer problem</li>
 <li><a href="#inherience_types">Public VS Protected VS Private Inherience</li>
+<li><a href="#race_conditions">Race Conditions</a></li>
 <li><a href="#raii">RAII</a></li>
 <li><a href="#semaphores">Semaphores</a></li>
 <li><a href="#shared_pointers">Shared pointers</a></li>
@@ -55,10 +62,11 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li><a href="#volatile">Volatile</a></li>
 <li><a href="#weak_pointers">Weak Pointers</a></li>
 <li>What are C++ access specifiers</li>
-<li>What are the four principles of OOP</li>
-<li>What is a pointer</li>
+<li>What are the main features of OOP</li>
 <li>What is continious integration</li>
 <li>What properties does well written code generally have</li>
+<li>Why is polymorphism important to GUIs</li>
+
 <!-- Additional Topics -->
 <!-- std::move -->
 
@@ -130,6 +138,50 @@ A keyword that specifies that a variable's value is constant and prevents the pr
 }
 </pre></code>
 
+<h2 id="deadlocks">Deadlocks</h2>
+<h3>Description</h3>
+A deadlock is any situation in which two or more threads are blocked indefinitely. For example, lets say there are two threads, t1 and t2, and two resources, r1 and r2. 
+T1 and t2 both will not finish their execution unless they have both resource r1 and r2 locked. If t1 locks r1 and t2 locks r2, then neither thread will ever finish resulting in a
+deadlock.
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+#include &lt;unistd.h&gt;
+
+using namespace std;
+
+mutex chopstick1;
+mutex chopstick2;
+
+void eat1(){
+    
+    lock_guard&lt;mutex&gt; g1(chopstick1);
+    usleep(1 * 1000000);
+    lock_guard&lt;mutex&gt; g2(chopstick2);
+    
+    cout &lt;&lt; &quot;burp&quot; &lt;&lt; endl;
+}
+
+void eat2(){
+    
+    lock_guard&lt;mutex&gt; g2(chopstick2);
+    usleep(1 * 1000000);
+    lock_guard&lt;mutex&gt; g1(chopstick1);
+    
+    cout &lt;&lt; &quot;burp&quot; &lt;&lt; endl;
+}
+
+
+int main(){
+    thread t1 = thread(eat1);
+    thread t2 = thread(eat2);
+    t1.join();
+    t2.join();
+}
+</code></pre>
+
 <h2 id="threads_vs_processes">Difference between a thread and a process</h2>
 <h3>Description</h3>
 A thread is a sequence of instructions executed concurrently and is part of a process. A process is an instance of a program. Threads are "lighter" than processes. They require less time for context switching and require less resources. Threads share resources, unlike processes. Processes collabrate less with each other compared to threads.
@@ -171,40 +223,6 @@ Process #1136, Thread #0
 Process #1136, Thread #2
 Process #0, Thread #2
 Process #1136, Thread #1
-</code></pre>
-
-<h2 id="encapsulation">Encapsulation</h2>
-<h3>Description</h3>
-Encapsulation is restricting the access to some of an object's components. Genrally when we want to encapsulate
-an object's members, we use getters and setters. Encapsulation hides information which signifigantly cuts
-the software's complexity.
-<h3>Example</h3>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-
-class car{
-  private:
-    double speed;
-  public:
-    void setSpeed(double a){
-      speed = a;
-    }    
-
-    double getSpeed(){ 
-      return speed;   
-    }  
-};    
-
-int main(){
-  car c1;
-  c1.setSpeed(5.5);
-  cout<< &quot;The car's speed is &quot; << c1.getSpeed();
-
-  return 0;  
-}
-</code></pre>
-This program outputs:
-<pre><code>The car's speed is 5.5
 </code></pre>
 
 <h2 id="enumerations">Enumerations</h2>
@@ -441,59 +459,6 @@ With Mutexes:
  Hello I am 1
 </code></pre>
 
-<h2 id="polymorphism">Polymorphism</h2>
-<h3>Description</h3>
-Polymorphism means "many forms". It allows us to perform a single action in many ways. In C++, there are two kinds of polymorphism: static and dynamic. Static polymorphism is compile time and is method overloading. Dynamic polymorphism is run time and is method overriding. 
-<h3>Example</h3>
-<pre><code>#include &#x3C;iostream&#x3E;
-#include &#x3C;string&#x3E;
-
-using namespace std;
-
-class person{
-    public:
-        virtual void speak(){
-            cout &#x3C;&#x3C; &#x22;Hello&#x22; &#x3C;&#x3C; endl;
-        }
-};
-
-class teacher : public person{
-    public:
-    
-        //Overriden, run-time polymorphism
-        void speak(){
-            cout &#x3C;&#x3C; &#x22;Hello, class!&#x22; &#x3C;&#x3C; endl;
-        }  
-        
-        //Overloaded, compile time polymorphism
-        void speak(string s){
-            cout &#x3C;&#x3C; s &#x3C;&#x3C; endl;
-        }
-};
-
-int main()
-{
-    person* p_ptr;
-    person p;
-    teacher t;
-    
-    p_ptr = &#x26;p;
-    p_ptr-&#x3E;speak();
-    
-    p_ptr = &#x26;t;
-    p_ptr-&#x3E;speak();
-    
-    t.speak(string(&#x22;The lesson is done!&#x22;));
-    
-    return 0;
-}
-</code></pre>
-This program outputs:
-<pre><code>Hello
-Hello, class!
-The lesson is done!
-</code></pre>
-
 <h2 id="inherience_types">Public VS Protected VS Private Inherience</h2>
 <h3>Description</h3>
 Public inheritance has everything able to access everything of the base class. Protected inheritance only has the children able to access everything of the base class. Private inheritance only allows the parent to have access to everything. Default inheritance is private.
@@ -559,6 +524,48 @@ protected childred and private childred need getters
 protected childred and protected childred can be printed by children of the base class
 </code></pre>
 
+<h2 id="race_conditions">Race Conditions</h2>
+<h3>Description</h3>
+A race condition is when two or more threads try to read or write a piece of data
+and atleast one of those threads is writing. Race conditions result in undefined behavior. The 
+cure for a race condition, most of the time, is mutexes.
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stack&gt;
+
+using namespace std;
+
+std::stack&lt;int&gt; s;
+
+void remove_add_1(){
+    //MUTEX HERE WOULD PREVENT RACE CONDITION
+    s.pop();
+    usleep(1000);
+    s.push(1);
+    cout &lt;&lt; s.top() &lt;&lt; endl;
+}
+
+int main(){
+    
+    s.push(0);
+    
+    thread readers[10];
+    
+    for(int i=0;i&lt;10;i++){
+        readers[i] = thread(remove_add_1);
+    }
+    
+    for(int i=0;i&lt;10;i++){
+        readers[i].join();
+    }
+}
+</code></pre>
+This program outputs:
+<pre><code>Created
+Segmentation Fault
+</code></pre>
 
 <h2 id="raii">RAII</h2>
 <h3>Description</h3>
@@ -684,16 +691,16 @@ int main(){
 }
 </code></pre>
 This program outputs:
-<pre><code>	0 is in
-	0 is out
-	2 is in
-	4 is in
-	4 is out
-	2 is out
-	1 is in
-	1 is out
-	3 is in
-	3 is out
+<pre><code> 0 is in
+  0 is out
+  2 is in
+  4 is in
+  4 is out
+  2 is out
+  1 is in
+  1 is out
+  3 is in
+  3 is out
 </code></pre>
 
 <h2 id="smart_pointers">Smart Pointer</h2>
@@ -702,15 +709,15 @@ Similar to a pointer except it has automatic memory management. Once the scope
 of the smart pointer ends, the program knows to destory the pointer. There are currently
 three kinds of smart pointers: "unique_ptr", "shared_ptr", and "weak_ptr". There used
 to be an "auto_ptr", but this was deprecated in c++11 and removed in c++17.
-	<h4 id="unique_pointers">Unique Pointers</h4>
-	Owns and manages another object through a pointer and disposes of it when the
-	pointer goes out of scope. If you try to make a copy of a unique pointer, the
-	compilier will give you an error.
-	<h4 id="shared_pointers">Shared Pointers</h4>
-	Same thing as a unique pointer, except you are allowed to make copies.
-	<h4 id="weak_pointers">Weak Pointers</h4>
-	Smart pointer that has a non-owning("weak") reference to an object that is a
-	shared pointer.
+  <h4 id="unique_pointers">Unique Pointers</h4>
+  Owns and manages another object through a pointer and disposes of it when the
+  pointer goes out of scope. If you try to make a copy of a unique pointer, the
+  compilier will give you an error.
+  <h4 id="shared_pointers">Shared Pointers</h4>
+  Same thing as a unique pointer, except you are allowed to make copies.
+  <h4 id="weak_pointers">Weak Pointers</h4>
+  Smart pointer that has a non-owning("weak") reference to an object that is a
+  shared pointer.
 <h3>Example</h3>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;string&gt;
@@ -917,5 +924,5 @@ Prevents the addresses from being optimized away. Volatile is needed for embedde
     //The compliler will not &quot;optimize away&quot; the b variable
     volatile int b = 100;
     while(b == 100){}
-}	
+} 
 </code></pre>
