@@ -13,6 +13,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li><a href="#abstract_class">Abstract Class</a></li>
 <li>Abstraction</li>
 <li><a href="#abstract_class">Abstract Class</a></li>
+<li><a href="#atomic_datatypes">Atomic Datatypes</a></li>
 <li><a href="#const">Const</a></li>
 <li>Copy constructor</li>
 <li><a href="#deadlocks">Deadlocks</a></li>
@@ -112,6 +113,49 @@ int main() {
 This program outputs:
 <pre><code>beep
 honk
+</code></pre>
+
+<h2 id="atomic_datatypes">Atomic Datatypes</h2>
+<h3>Description</h3>
+Atomic datatypes are datatypes that have all of their member functions execute as a single transaction. They are similar to mutexes, except they are signifigantly faster due to cache level optimization. Atomic datatypes do not inherit all of the member functions of their parent datatype. For example, in most cases, mulitply is not overloaded. Overloaded operators are good for making atomic datatypes readable, but in practice the atomic member functions help you write more "correct" code. Atomic member functions include: load(), store(), exchance(), etc.
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;atomic&gt;
+
+using namespace std;
+
+atomic&lt;int&gt; atomic_iter;
+int iter = 0;
+
+void update(){
+    atomic_iter++;
+    iter++;
+}
+
+int main()
+{
+    const auto processor_count = 10;
+
+	thread threads[processor_count];
+
+	for(uint i=0;i&lt;processor_count;i++){
+		threads[i] = thread(update);
+	}
+
+	for(uint i=0;i&lt;processor_count;i++){
+		threads[i].join();
+	}
+	
+	cout &lt;&lt; atomic_iter &lt;&lt; endl; //Cannot have a race condition
+	cout &lt;&lt; iter &lt;&lt; endl; //Can have a race condition
+
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>10
+10
 </code></pre>
 
 <h2 id="const">Const</h2>
