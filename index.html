@@ -10,7 +10,6 @@
 Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by teaching</a> to find gaps in my C++/ OOP knowledge.
 
 <h2>Table of Contents</h2>
-<li><a href="#abstract_class">Abstract Class</a></li>
 <li>Abstraction</li>
 <li><a href="#abstract_class">Abstract Class</a></li>
 <li><a href="#atomic_datatypes">Atomic Datatypes</a></li>
@@ -28,9 +27,8 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>Friend function</li>
 <li>function pointer and function object</li>
 <li><a href="#inline">Inline function</a></li>
-<li>Interfaces</li>
+<li><a href="#interfaces">Interfaces</a></li>
 <li>Interitance</li>
-<li>Interitance (include difficult problems of what will the output be)</li>
 <li><a href="#iterators">Iterators</a></li>
 <li>Keywords</li>
 <li><a href="#lambda_functions">Lambda Functions</a></li>
@@ -344,6 +342,56 @@ int main(){
 This program outputs:
 <pre><code>non-inline took 132 milliseconds
 inline took 0 milliseconds
+</code></pre>
+
+<h2 id="interfaces">Interfaces</h2>
+<h3>Description</h3>
+<h3>Example</h3>
+<pre><code>Interfaces are used to separate the declaration from the implementation. Implementation of an interface is done with run-time polymorphism. An abstract class that only has pure abstract classes is an interface. Pure virtual functions are virtual functions which end in "=0";
+</code></pre>
+<h3>Example</h3>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+class person{
+    public:
+    virtual void speak() = 0;
+    virtual int getSalary() = 0;
+};
+
+class teacher : person{
+    public: 
+    void speak(){
+        cout &#x3C;&#x3C; &#x22;Today&#x27;s lesson is...&#x22; &#x3C;&#x3C; endl;
+    }
+    int getSalary(){
+        return 50000;
+    }
+};
+
+class student : person{
+    public:
+    void speak(){
+        cout &#x3C;&#x3C; &#x22;I love learning&#x22; &#x3C;&#x3C; endl;
+    }
+    int getSalary(){
+        return 0;
+    }
+};
+
+int main ()
+{
+  teacher t;
+  student s;
+  t.speak();
+  s.speak();
+
+  return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>Today's lesson is...
+I love learning
 </code></pre>
 
 <h2 id="iterators">Iterators</h2>
