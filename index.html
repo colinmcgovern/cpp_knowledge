@@ -21,6 +21,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>Differences between C and C++</li>
 <li>Differences between references and pointers</li>
 <li>Encapsulation</li>
+<li><a href="#detached_threads">Detatched Threads</a></li>
 <li><a href="#enumerations">Enumerations</a></li>
 <li>Exceptions</li>
 <li>Friend class</li>
@@ -28,7 +29,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>function pointer and function object</li>
 <li><a href="#inline">Inline function</a></li>
 <li><a href="#interfaces">Interfaces</a></li>
-<li>Interitance</li>
+<li><a href="#inheritance">Interitance</li>
 <li><a href="#iterators">Iterators</a></li>
 <li>Keywords</li>
 <li><a href="#lambda_functions">Lambda Functions</a></li>
@@ -267,6 +268,53 @@ Process #0, Thread #2
 Process #1136, Thread #1
 </code></pre>
 
+<h2 id="detached_threads">Detatched Threads</h2>
+<h3>Description</h3>
+Detached threads are threads that have had their "detached()" member function called. They cannot be joined. When a detatched thread is done, its resources are destroyed safely.
+<h3>Example</h3>#include &lt;iostream&gt;
+#include &lt;thread&gt;
+#include &lt;unistd.h&gt;
+
+using namespace std;
+
+int main ()
+{
+  thread t1([]{
+     cout &lt;&lt; &quot;t1 started&quot; &lt;&lt; endl;
+     sleep(3);
+     cout &lt;&lt; &quot;t1 done&quot; &lt;&lt; endl;
+  });
+  
+  thread t2([]{
+     cout &lt;&lt; &quot;t2 started&quot; &lt;&lt; endl;
+     sleep(2);
+     cout &lt;&lt; &quot;t2 done&quot; &lt;&lt; endl;
+  });
+  
+  thread t3([]{
+     cout &lt;&lt; &quot;t3 started&quot; &lt;&lt; endl;
+     sleep(1);
+     cout &lt;&lt; &quot;t3 done&quot; &lt;&lt; endl;
+  });
+  
+  t1.detach();
+  t2.detach();
+  t3.detach();
+  
+  sleep(5);
+
+  return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>t1 started                                                                                                                                                                   
+t3 started                                                                                                                                                                   
+t2 started                                                                                                                                                                   
+t3 done                                                                                                                                                                      
+t2 done                                                                                                                                                                      
+t1 done 
+</code></pre>
+
 <h2 id="enumerations">Enumerations</h2>
 <h3>Description</h3>
 A user defined set of named constants. It is a way of associating names with integers.
@@ -392,6 +440,79 @@ int main ()
 This program outputs:
 <pre><code>Today's lesson is...
 I love learning
+</code></pre>
+
+<h2 id="inheritance">Inheritance</h2>
+<h3>Description</h3>
+Inheritance is when you define a class in terms of another class. It allows us to write less code. Less code = less opportunities 
+for bugs. Inheritance is a "is a" relationship. For example, a vehicle IS A car. There are three kinds of inheritance: public,
+protected, and private. A derived class inherits all of the base class's methods except for: constructors, destructors, copy constructors, 
+overloaded operators, and friend functions. 
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class edible{
+    public:
+    int calories;
+};
+
+class animal{
+    public:
+    int consumed_calories = 0;
+    virtual void eat(edible e) = 0;
+};
+
+class tiger : public animal{
+    public:
+    void eat(edible e){
+        consumed_calories += e.calories;
+        cout &lt;&lt; &quot;The tiger has &quot; &lt;&lt; consumed_calories &lt;&lt; &quot; total calories&quot; &lt;&lt; endl;
+    }
+};
+
+class rabbit : public edible, public animal{
+    public:
+    void eat(edible e){
+        consumed_calories += e.calories;
+        cout &lt;&lt; &quot;The rabbit has &quot; &lt;&lt; consumed_calories &lt;&lt; &quot; total calories&quot; &lt;&lt; endl;
+    }
+    
+    rabbit(){
+        calories = 5000;
+    }
+};
+
+class grass : public edible{
+    public:
+    grass(){
+        calories = 1;
+    }
+};
+
+int main()
+{
+    tiger t1;
+    rabbit r1;
+    grass g1;
+    grass g2;
+    grass g3;
+    
+    r1.eat(g1);
+    r1.eat(g1);
+    r1.eat(g1);
+    t1.eat(r1);
+
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>The rabbit has 1 total calories                                                                                                                                              
+The rabbit has 2 total calories                                                                                                                                              
+The rabbit has 3 total calories                                                                                                                                              
+The tiger has 5000 total calories
 </code></pre>
 
 <h2 id="iterators">Iterators</h2>
