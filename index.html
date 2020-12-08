@@ -271,7 +271,8 @@ Process #1136, Thread #1
 <h2 id="detached_threads">Detatched Threads</h2>
 <h3>Description</h3>
 Detached threads are threads that have had their "detached()" member function called. They cannot be joined. When a detatched thread is done, its resources are destroyed safely.
-<h3>Example</h3>#include &lt;iostream&gt;
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
 #include &lt;thread&gt;
 #include &lt;unistd.h&gt;
 
@@ -307,12 +308,12 @@ int main ()
 }
 </code></pre>
 This program outputs:
-<pre><code>t1 started                                                                                                                                                                   
-t3 started                                                                                                                                                                   
-t2 started                                                                                                                                                                   
-t3 done                                                                                                                                                                      
-t2 done                                                                                                                                                                      
-t1 done 
+<pre><code>t1 started
+t3 started
+t2 started
+t3 done
+t2 done
+t1 done
 </code></pre>
 
 <h2 id="enumerations">Enumerations</h2>
