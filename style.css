@@ -80,3 +80,15 @@ body {
   margin:    0 auto;
   max-width: 900px;
 }
+
+a {
+  color: rgb(102,153,204);
+}
+
+a:visited {
+  color: rgb(102,153,204);
+}
+
+a:hover {
+ text-shadow: 0px 0px 3px white;
+}

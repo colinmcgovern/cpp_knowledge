@@ -22,7 +22,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>Differences between C and C++</li>
 <li>Differences between references and pointers</li>
 <li>Encapsulation</li>
-<li><a href="#detached_threads">detached Threads</a></li>
+<li><a href="#detached_threads">Detached Threads</a></li>
 <li><a href="#enumerations">Enumerations</a></li>
 <li>Exceptions</li>
 <li>Friend class</li>
@@ -74,50 +74,46 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 Abstraction is the process of moving from a specific idea to a more generalized one. Examples include the concept of data types, functions, and abstract classes. 
 <h3>Example</h3>
 <pre><code>#include &lt;iostream&gt;
-#include &lt;condition_variable&gt;
-#include &lt;thread&gt;
-#include &lt;mutex&gt;
-#include &lt;string&gt;
-#include &lt;queue&gt;
-#include &lt;chrono&gt;
+#include &lt;vector&gt;
 
 using namespace std;
 
-mutex m;
-condition_variable cv;
+enum COLOR{RED,WHITE,BLUE};
 
-queue&lt;string&gt; food_counter;
-
+class marble_jar{
+  vector&lt;COLOR&gt; contents;
+  
+  public:
+    void add(COLOR c){
+        contents.push_back(c);
+    }
+    
+    int num_marbles(){
+        return contents.size();
+    }
+    
+    COLOR last_color(){
+        return contents[contents.size()-1];
+    }
+    
+};
 
 int main()
 {
+    marble_jar j;
     
-    for(uint i=0;i&lt;5;i++){
-        thread customer([]{
-            unique_lock&lt;mutex&gt; ul(m);
-            cv.wait(ul);
-            food_counter.pop();
-            cout &lt;&lt; &quot;A customer ate the food&quot; &lt;&lt; endl;
-        });
-        customer.detach();
-    }
+    j.add(RED);
+    j.add(RED);
+    j.add(BLUE);
+    j.add(RED);
+    j.add(WHITE);
     
-    thread chef([]{
-        for(uint i=0;i&lt;10;i++){
-            unique_lock&lt;mutex&gt; ul(m);
-            cout &lt;&lt; &quot;chef made food&quot; &lt;&lt; endl;
-            food_counter.push(&quot;food&quot;);
-            ul.unlock();
-            cv.notify_one();
-            std::this_thread::sleep_for(chrono::seconds(1));
-        }
-    });
-    
-    
-    chef.join();
-    
+    cout &lt;&lt; j.num_marbles() &lt;&lt; endl;
+    cout &lt;&lt; j.last_color() &lt;&lt; endl;
+
     return 0;
-}</code></pre>
+}
+</code></pre>
 This program outputs:
 <pre><code>5
 1
@@ -221,7 +217,8 @@ There are additional functions. Wait_for and wait_until allows us to cancel a th
 sleeping to prevent a deadlock. Wait also has an option to take in a predicate to handle
 sperious wakeups. We also have notify_all() which works like notify_one(), except it 
 notifies all waiting threads instead of just one.
-<h3>Example</h3>#include &lt;iostream&gt;
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
 #include &lt;condition_variable&gt;
 #include &lt;thread&gt;
 #include &lt;mutex&gt;
@@ -395,7 +392,7 @@ Process #0, Thread #2
 Process #1136, Thread #1
 </code></pre>
 
-<h2 id="detached_threads">detached Threads</h2>
+<h2 id="detached_threads">Detached Threads</h2>
 <h3>Description</h3>
 Detached threads are threads that have had their "detached()" member function called. They cannot be joined. When a detached thread is done, its resources are destroyed safely.
 <h3>Example</h3>
