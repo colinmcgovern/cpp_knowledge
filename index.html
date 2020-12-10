@@ -10,9 +10,10 @@
 Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by teaching</a> to find gaps in my C++/ OOP knowledge.
 
 <h2>Table of Contents</h2>
-<li>Abstraction</li>
+<li><a href="#abstraction">Abstraction</li>
 <li><a href="#abstract_class">Abstract Class</a></li>
 <li><a href="#atomic_datatypes">Atomic Datatypes</a></li>
+<li><a href="#condition_variable">Condition Variable</a></li>
 <li><a href="#const">Const</a></li>
 <li>Copy constructor</li>
 <li><a href="#deadlocks">Deadlocks</a></li>
@@ -21,7 +22,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>Differences between C and C++</li>
 <li>Differences between references and pointers</li>
 <li>Encapsulation</li>
-<li><a href="#detached_threads">Detatched Threads</a></li>
+<li><a href="#detached_threads">detached Threads</a></li>
 <li><a href="#enumerations">Enumerations</a></li>
 <li>Exceptions</li>
 <li>Friend class</li>
@@ -37,6 +38,7 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>L-values vs r-values</li>
 <li>Major C++ features</li>
 <li>Malloc() vs new</li>
+<li>Move</li>
 <li><a href="#mutexes">Mutexes</a></li>
 <li>New Features of C++11</li>
 <li>New Features of C++14</li>
@@ -67,8 +69,59 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <li>What properties does well written code generally have</li>
 <li>Why is polymorphism important to GUIs</li>
 
-<!-- Additional Topics -->
-<!-- std::move -->
+<h2 id="abstraction">Abstraction</h2>
+<h3>Description</h3>
+Abstraction is the process of moving from a specific idea to a more generalized one. Examples include the concept of data types, functions, and abstract classes. 
+<h3>Example</h3>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;condition_variable&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;chrono&gt;
+
+using namespace std;
+
+mutex m;
+condition_variable cv;
+
+queue&lt;string&gt; food_counter;
+
+
+int main()
+{
+    
+    for(uint i=0;i&lt;5;i++){
+        thread customer([]{
+            unique_lock&lt;mutex&gt; ul(m);
+            cv.wait(ul);
+            food_counter.pop();
+            cout &lt;&lt; &quot;A customer ate the food&quot; &lt;&lt; endl;
+        });
+        customer.detach();
+    }
+    
+    thread chef([]{
+        for(uint i=0;i&lt;10;i++){
+            unique_lock&lt;mutex&gt; ul(m);
+            cout &lt;&lt; &quot;chef made food&quot; &lt;&lt; endl;
+            food_counter.push(&quot;food&quot;);
+            ul.unlock();
+            cv.notify_one();
+            std::this_thread::sleep_for(chrono::seconds(1));
+        }
+    });
+    
+    
+    chef.join();
+    
+    return 0;
+}</code></pre>
+This program outputs:
+<pre><code>5
+1
+</code></pre>
 
 <h2 id="abstract_class">Abstract Class</h2>
 <h3>Description</h3>
@@ -155,6 +208,80 @@ int main()
 This program outputs:
 <pre><code>10
 10
+</code></pre>
+
+<h2 id="const">Condition Variable</h2>
+<h3>Description</h3>
+Condition variables allow a thread to atomically release a held mutex
+and put itself to sleep. There are two main functions to a condition variable: wait() and
+notify_one(). Wait() tells the thread to go to sleep until a notification is available.
+Notify_one() sends a signal to one of the sleeping threads to wake up.
+
+There are additional functions. Wait_for and wait_until allows us to cancel a thread's
+sleeping to prevent a deadlock. Wait also has an option to take in a predicate to handle
+sperious wakeups. We also have notify_all() which works like notify_one(), except it 
+notifies all waiting threads instead of just one.
+<h3>Example</h3>#include &lt;iostream&gt;
+#include &lt;condition_variable&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;chrono&gt;
+
+using namespace std;
+
+mutex m;
+condition_variable cv;
+
+queue&lt;string&gt; food_counter;
+
+
+int main()
+{
+    
+    for(uint i=0;i&lt;5;i++){
+        thread customer([]{
+            unique_lock&lt;mutex&gt; ul(m);
+            cv.wait(ul);
+            food_counter.pop();
+            cout &lt;&lt; &quot;A customer ate the food&quot; &lt;&lt; endl;
+        });
+        customer.detach();
+    }
+    
+    thread chef([]{
+        for(uint i=0;i&lt;10;i++){
+            unique_lock&lt;mutex&gt; ul(m);
+            cout &lt;&lt; &quot;chef made food&quot; &lt;&lt; endl;
+            food_counter.push(&quot;food&quot;);
+            ul.unlock();
+            cv.notify_one();
+            std::this_thread::sleep_for(chrono::seconds(1));
+        }
+    });
+    
+    
+    chef.join();
+    
+    return 0;
+}
+This program outputs:
+<pre><code>chef made food
+A customer ate the food
+chef made food
+A customer ate the food
+chef made food
+A customer ate the food
+chef made food
+A customer ate the food
+chef made food
+A customer ate the food
+chef made food
+chef made food
+chef made food
+chef made food
+chef made food
 </code></pre>
 
 <h2 id="const">Const</h2>
@@ -268,9 +395,9 @@ Process #0, Thread #2
 Process #1136, Thread #1
 </code></pre>
 
-<h2 id="detached_threads">Detatched Threads</h2>
+<h2 id="detached_threads">detached Threads</h2>
 <h3>Description</h3>
-Detached threads are threads that have had their "detached()" member function called. They cannot be joined. When a detatched thread is done, its resources are destroyed safely.
+Detached threads are threads that have had their "detached()" member function called. They cannot be joined. When a detached thread is done, its resources are destroyed safely.
 <h3>Example</h3>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;thread&gt;
