@@ -12,34 +12,49 @@ Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by t
 <h2>Table of Contents</h2>
 <li><a href="#abstraction">Abstraction</li>
 <li><a href="#abstract_class">Abstract Class</a></li>
+<li><a href="#access_specifiers">Access Specifiers</a></li>
+<li><a href="#async_future_promise">Async, Future, and Promise</a></li>
 <li><a href="#atomic_datatypes">Atomic Datatypes</a></li>
-<li><a href="#condition_variable">Condition Variable</a></li>
+<li><a href="#auto">Auto</a></li>
+<li><a href="#condition_variable">Condition Variables</a></li>
 <li><a href="#const">Const</a></li>
 <li><a href="#deadlocks">Deadlocks</a></li>
-<li><a href="#threads_vs_processes">Difference between a thread and a process</a></li>
-<li>Encapsulation</li>
 <li><a href="#detached_threads">Detached Threads</a></li>
+<li><a href="#threads_vs_processes">Difference between a thread and a process</a></li>
+<li><a href="#encapsulation">Encapsulation</li>
 <li><a href="#enumerations">Enumerations</a></li>
-<li>Friend class</li>
-<li>Friend function</li>
+<li><a href="#final">Final</a></li>
+<li><a href="#friend_class">Friend class</a></li>
+<li><a href="#friend_function">Friend function</a></li>
 <li><a href="#inline">Inline function</a></li>
 <li><a href="#interfaces">Interfaces</a></li>
 <li><a href="#inheritance">Interitance</li>
 <li><a href="#iterators">Iterators</a></li>
 <li><a href="#lambda_functions">Lambda Functions</a></li>
 <li><a href="#mutexes">Mutexes</a></li>
+<li><a href="#no_except">No Except</a></li>
+<li><a href="#once_flag">Once_flag</a></li>
 <li><a href="#overloading">Overloading</a></li>
 <li><a href="#overridding">Overridding</a></li>
+<li><a href="#override_keyword">Override Keyword</a></li>
 <li><a href="#polymorphism">Polymorphism</a></li>
+<li><a href="#predicate">Predicate</a></li>
 <li><a href="#inherience_types">Public VS Protected VS Private Inherience</li>
 <li><a href="#race_conditions">Race Conditions</a></li>
 <li><a href="#raii">RAII</a></li>
+<li><a href="#scoped_lock">Scoped Lock</a></li>
 <li><a href="#semaphores">Semaphores</a></li>
+<li><a href="#shared_lock">Shared Lock</a></li>
 <li><a href="#shared_pointers">Shared pointers</a></li>
+<li><a href="#singleton_pattern">Singleton Pattern</a></li>
 <li><a href="#smart_pointers">Smart Pointers</a></li>
+<li><a href="#stl_algorithms">STL Algorithms</a></li>
+<li><a href="#terminate">Terminate</a></li>
 <li><a href="#threads">Threads</a></li>
 <li><a href="#type_generics">Type Generics</a></li>
-<li><a href="#unique_pointers">Unique pointers</a></li>
+<li><a href="#unique_locks">Unique Locks</a></li>
+<li><a href="#unique_pointers">Unique Pointers</a></li>
+<li><a href="#virtual">Virtual</a></li>
 <li><a href="#volatile">Volatile</a></li>
 <li><a href="#weak_pointers">Weak Pointers</a></li>
 
@@ -159,18 +174,18 @@ int main()
 {
     const auto processor_count = 10;
 
-	thread threads[processor_count];
+  thread threads[processor_count];
 
-	for(uint i=0;i&lt;processor_count;i++){
-		threads[i] = thread(update);
-	}
+  for(uint i=0;i&lt;processor_count;i++){
+    threads[i] = thread(update);
+  }
 
-	for(uint i=0;i&lt;processor_count;i++){
-		threads[i].join();
-	}
-	
-	cout &lt;&lt; atomic_iter &lt;&lt; endl; //Cannot have a race condition
-	cout &lt;&lt; iter &lt;&lt; endl; //Can have a race condition
+  for(uint i=0;i&lt;processor_count;i++){
+    threads[i].join();
+  }
+  
+  cout &lt;&lt; atomic_iter &lt;&lt; endl; //Cannot have a race condition
+  cout &lt;&lt; iter &lt;&lt; endl; //Can have a race condition
 
     return 0;
 }
@@ -180,7 +195,7 @@ This program outputs:
 10
 </code></pre>
 
-<h2 id="const">Condition Variable</h2>
+<h2 id="condition_variable">Condition Variables</h2>
 <h3>Description</h3>
 Condition variables allow a thread to atomically release a held mutex
 and put itself to sleep. There are two main functions to a condition variable: wait() and
@@ -366,6 +381,12 @@ Process #1136, Thread #2
 Process #0, Thread #2
 Process #1136, Thread #1
 </code></pre>
+
+<h2 id="encapsulation">Encapsulation</h2>
+<h3>Description</h3>
+Encapsulation is the binding of data with the functions which manipulate them. Encapsulation
+reduces complexity, protects our data, and makes our classes easier to change. Through data hiding,
+encapsulation leads to more abstraction.
 
 <h2 id="detached_threads">Detached Threads</h2>
 <h3>Description</h3>
@@ -772,6 +793,11 @@ With Mutexes:
  Hello I am 1
 </code></pre>
 
+<h2 id="inherience_types">Predicate</h2>
+<h3>Description</h3>
+Predicates are any callable function which returns a bool. Many STL algorithms use
+predicates as input. For example, all_of(), any_of(), and none_of().
+
 <h2 id="inherience_types">Public VS Protected VS Private Inherience</h2>
 <h3>Description</h3>
 Public inheritance has everything able to access everything of the base class. Protected inheritance only has the children able to access everything of the base class. Private inheritance only allows the parent to have access to everything. Default inheritance is private.
@@ -1101,6 +1127,11 @@ This program outputs:
 100
 20.9
 </code></pre>
+
+<h2 id="unique_locks">Unique Locks</h2>
+<h3>Description</h3>
+Unique locks on construction locks a mutex and on destruction unlocks a mutex. Unique locks
+differs from lock guards, because they can be unlocked.
 
 <h2 id="threads">Threads</h2>
 <h3>Description</h3>
