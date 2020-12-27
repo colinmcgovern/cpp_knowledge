@@ -1,0 +1,28 @@
+<h2 id="terminate">Terminate</h2>
+<h3>Description</h3>
+Terminate is called automatically in a C++ program when there is an unhandled exception. The function "set_terminate()" 
+allows you to set which function gets called on terminate. 
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+void handle(){
+    cout &#x3C;&#x3C; &#x22;Exception thrown but nothing to catch it...&#x22; &#x3C;&#x3C; endl;
+}
+
+int main(){
+    set_terminate(handle);
+    
+    vector&#x3C;int&#x3E; p;
+    p.at(0);
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Exception thrown but nothing to catch it...
+bash: line 7: 15928 Aborted                 (core dumped) ./a.out
+</code></pre>

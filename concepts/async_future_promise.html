@@ -1,0 +1,48 @@
+<h2 id="async_future_promise">Async, Future, and Promise</h2>
+<h3>Description</h3>
+Future and promoise are two seperate sides of an asynchronous operation Promise acts as a producer and future acts as a consumer. A future will block until it's thread is ready to be joined. The function async creates a new thread and returns a future. The future function has two launch policies: 
+<li>"std::launch::async" which cretes a new thread</li>
+<li>"std::launch::deferred" which does not create a new thread</li>
+By default async decides which launch policy works best at time of execution.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;future&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+int factorial(int input){
+    int output = 1;
+    for(uint i=1;i&#x3C;=input;i++){
+        output *= i;
+    }
+    return output;
+}
+
+int main() {
+    
+    vector&#x3C;future&#x3C;int&#x3E; &#x3E; f;
+    
+    for(int i=1;i&#x3C;11;i++){
+        f.push_back(async(factorial,i));
+    }
+    
+    for(int i=1;i&#x3C;11;i++){
+        cout &#x3C;&#x3C; i &#x3C;&#x3C; &#x22;! = &#x22; &#x3C;&#x3C; f[i-1].get() &#x3C;&#x3C; endl;
+    }
+}
+</code></pre>
+This program outputs:
+<pre><code>1! = 1                                                                
+2! = 2                                                                
+3! = 6                                                                
+4! = 24                                                               
+5! = 120                                                              
+6! = 720                                                              
+7! = 5040                                                             
+8! = 40320                                                            
+9! = 362880                                                           
+10! = 3628800 
+</code></pre>
+    
+  

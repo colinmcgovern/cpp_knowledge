@@ -1,0 +1,52 @@
+<h2 id="final">Final</h2>
+<h3>Description</h3>
+Final is a keyword which specifies a virutal function which cannot be overwritten.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class fish{
+    public:
+        virtual void print_home() final{
+            cout &#x3C;&#x3C; &#x22;Ocean&#x22; &#x3C;&#x3C; endl;
+        };
+        void print_shape(){
+            cout &#x3C;&#x3C; &#x22;Long&#x22; &#x3C;&#x3C; endl;
+        };
+};
+
+class flounder : public fish{
+    
+    public:
+        //Not allowed, would return error
+        // void print_home(){
+        //     cout &#x3C;&#x3C; &#x22;Sand&#x22; &#x3C;&#x3C; endl;
+        // };
+        
+        void print_shape(){
+            cout &#x3C;&#x3C; &#x22;Flat&#x22; &#x3C;&#x3C; endl;
+        }
+    
+};
+
+int main(){
+    fish f1;
+    f1.print_home();
+    f1.print_shape();
+    
+    flounder f2;
+    f2.print_home();
+    f2.print_shape();
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Ocean
+Long
+Ocean
+Flat
+</code></pre>

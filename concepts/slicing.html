@@ -1,0 +1,31 @@
+<h2 id="slicing">Slicing</h2>
+<h3>Description</h3>
+Slicing is when you assign an object of a derived class to an instance of a base class, therefore some its information is "sliced" away.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+
+using namespace std;
+
+class vehicle{
+    public:
+        string color = &#x22;red&#x22;;
+};
+
+class truck : public vehicle{
+    public:
+        double bed_size = 5;
+};
+
+int main()
+{
+    vehicle* v = new truck();
+    cout &#x3C;&#x3C; v-&#x3E;color &#x3C;&#x3C; endl;
+    //cout &#x3C;&#x3C; v-&#x3E;bed_size &#x3C;&#x3C; endl; This is sliced away
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>red
+</code></pre>

@@ -1,0 +1,64 @@
+<h2 id="friend_function">Friend Function</h2>
+<h3>Description</h3>
+A function that is given access to private and protected data. They are defined outside of the class scope.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class grass{
+    double length;
+    
+    friend void cut(grass &#x26;g);
+    
+    public:
+        double getLength(){
+            return length;
+        };
+    
+        grass(double l){
+            length = l;
+        }
+
+};
+
+void cut(grass &#x26;g){
+    g.length = 3;
+}
+
+int main()
+{
+    grass g1(5);
+    grass g2(3);
+    grass g3(6);
+    
+    cout &#x3C;&#x3C; &#x22;Before cut&#x22; &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g1.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g2.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g3.getLength() &#x3C;&#x3C; endl;
+    
+    cut(g1);
+    cut(g2);
+    cut(g3);
+
+    cout &#x3C;&#x3C; endl &#x3C;&#x3C; &#x22;After cut&#x22; &#x3C;&#x3C; endl;    
+    cout &#x3C;&#x3C; g1.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g2.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g3.getLength() &#x3C;&#x3C; endl;
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Before cut
+5
+3
+6
+
+After cut
+3
+3
+3
+</code></pre>

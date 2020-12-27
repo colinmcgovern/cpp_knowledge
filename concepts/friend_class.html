@@ -1,0 +1,51 @@
+<h2 id="friend_class">Friend Class</h2>
+<h3>Description</h3>
+A friend class in C++ can access the private and protected members of the class in which it was declared as a friend. A derived class cannot give itself access to it's parent class's private. Proper use of friend classes increases encapsulation.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class flower;
+
+class petal{
+    string color;
+    friend flower;
+    
+    public:
+        string getColor(){
+            return color;
+        }
+};
+
+class flower{
+    public:
+        vector&#x3C;petal&#x3E; ps;
+        void set_color(string c){
+            for(auto &#x26;v : ps){
+                v.color = c;
+            }
+        }
+        
+};
+
+int main()
+{
+    flower f;
+    f.ps.push_back(petal());
+    f.ps.push_back(petal());
+    f.ps.push_back(petal());
+    f.set_color(&#x22;periwinkle&#x22;);
+    for(auto &#x26;v : f.ps){
+        cout &#x3C;&#x3C; v.getColor() &#x3C;&#x3C; endl;
+    }
+   
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>periwinkle
+periwinkle
+periwinkle
+</code></pre>

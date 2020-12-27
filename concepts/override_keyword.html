@@ -1,0 +1,33 @@
+<h2 id="override_keyword">Override Keyword</h2>
+<h3>Description</h3>
+The override keyword shows the reader of the code that you are overriding a 
+virtual function. When this keyword is used, the compiler will verify that your function is being overridden. Good C++ software engineers prefer compie time errors over runtime errors.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class item{
+    public:
+        virtual double price() = 0;
+};
+
+class banana : public item{
+    public:
+        double price() override {
+            return 1.00;
+        }
+};
+
+int main()
+{
+    item* i = new banana();
+    cout &#x3C;&#x3C; i-&#x3E;price() &#x3C;&#x3C; endl;
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>1
+</code></pre>

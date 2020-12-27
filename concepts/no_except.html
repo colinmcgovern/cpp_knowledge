@@ -1,0 +1,18 @@
+<h2 id="no_except">No Except</h2>
+<h3>Description</h3>
+Noexcept is a specifier which makes it so that a function is not allowed to throw an exception.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+double the_number_two() noexcept {
+    //throw 2; THIS WOULD CAUSE AN ERROR
+    return 2;
+}
+
+int main(){
+    the_number_two();
+    return 0;
+}
+</code></pre>

@@ -1,0 +1,62 @@
+<h2 id="access_specifiers">Access Specifiers</h2>
+<h3>Description</h3>
+Access specifiers are used in classes to define what its encapsulation behavior should be. There are three access specifiers in C++: public, private, and protected. Public class members are accessible to everyone. Private class members are accessible to no one. Protected is just like private, except they are accessible to the class's children. 
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class feline{
+    
+    private:
+        string name;
+        
+    protected:
+        int danger_level;
+    
+    public:     
+        string getName(){
+            return name;
+        }
+        
+        void setName(string n){
+            name = n;
+        }    
+        
+        int getDanger_level(){
+            return danger_level;
+        }
+};
+
+class house_cat : public feline{
+    
+    public:
+        house_cat(){
+            danger_level = 1;
+        }
+    
+};
+
+class lion : public feline{
+    public:
+        lion(){
+            danger_level = 10;
+        }
+};
+
+int main(){
+    house_cat h;
+    h.setName(&#x22;Fluffy&#x22;);
+    
+    lion l;
+    l.setName(&#x22;Cecil&#x22;);
+    
+    cout &#x3C;&#x3C; h.getName() &#x3C;&#x3C; &#x22; is danger level: &#x22; &#x3C;&#x3C; h.getDanger_level() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; l.getName() &#x3C;&#x3C; &#x22; is danger level: &#x22; &#x3C;&#x3C; l.getDanger_level() &#x3C;&#x3C; endl;
+</code></pre>
+This program outputs:
+<pre><code>
+Fluffy is danger level: 1
+Cecil is danger level: 10
+</code></pre>

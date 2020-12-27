@@ -1,0 +1,109 @@
+<h2 id="stl_algorithms">STL Algorithms</h2>
+<h3>Description</h3>
+The STL algorithms are a large number of helpful algorithms each implemented with iterator. Some of the algorithms require
+an operator to declared, for example "<". STL algorithms are helpful for writing fast programs quickly.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+#include &#x3C;algorithm&#x3E;
+#include &#x3C;chrono&#x3E;
+#include &#x3C;random&#x3E;
+
+using namespace std;
+
+int main()
+{
+    vector&#x3C;char&#x3E; kemps_deck;
+    for(int i=0;i&#x3C;4;i++){
+        for(int j=0;j&#x3C;9;j++){
+            kemps_deck.push_back(48+j);
+        }
+        kemps_deck.push_back(&#x27;J&#x27;);
+        kemps_deck.push_back(&#x27;Q&#x27;);
+        kemps_deck.push_back(&#x27;K&#x27;);
+        kemps_deck.push_back(&#x27;A&#x27;);
+    }
+    
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    shuffle(kemps_deck.begin(),kemps_deck.end(),default_random_engine(seed)); //from &#x3C;algorithm&#x3E;
+    
+    vector&#x3C;char&#x3E; player1_hand;
+    vector&#x3C;char&#x3E; player2_hand;
+    vector&#x3C;char&#x3E; player3_hand;
+    vector&#x3C;char&#x3E; player4_hand;
+    
+    for(int i=0;i&#x3C;4;i++){
+        player1_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+        player2_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+        player3_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+        player4_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+    }
+    
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+
+    cout &#x3C;&#x3C; &#x22;Player 1&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player1_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 1 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Player 2&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player2_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 2 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Player 3&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player3_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 3 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Player 4&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player4_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 4 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Player 1's Hand: 
+   4
+   6
+   A
+   K
+Player 2's Hand: 
+   7
+   7
+   7
+   7
+   Player 2 has kemps
+Player 3's Hand: 
+   J
+   2
+   8
+   A
+Player 4's Hand: 
+   Q
+   2
+   4
+   J
+</code></pre>

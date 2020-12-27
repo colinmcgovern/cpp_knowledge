@@ -1,0 +1,3 @@
+
+-causes the code to be put in the code of the method 
+-best for functions that are small and loaded often

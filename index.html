@@ -152,6 +152,116 @@ This program outputs:
 honk
 </code></pre>
 
+<h2 id="access_specifiers">Access Specifiers</h2>
+<h3>Description</h3>
+Access specifiers are used in classes to define what its encapsulation behavior should be. There are three access specifiers in C++: public, private, and protected. Public class members are accessible to everyone. Private class members are accessible to no one. Protected is just like private, except they are accessible to the class's children. 
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class feline{
+    
+    private:
+        string name;
+        
+    protected:
+        int danger_level;
+    
+    public:     
+        string getName(){
+            return name;
+        }
+        
+        void setName(string n){
+            name = n;
+        }    
+        
+        int getDanger_level(){
+            return danger_level;
+        }
+};
+
+class house_cat : public feline{
+    
+    public:
+        house_cat(){
+            danger_level = 1;
+        }
+    
+};
+
+class lion : public feline{
+    public:
+        lion(){
+            danger_level = 10;
+        }
+};
+
+int main(){
+    house_cat h;
+    h.setName(&#x22;Fluffy&#x22;);
+    
+    lion l;
+    l.setName(&#x22;Cecil&#x22;);
+    
+    cout &#x3C;&#x3C; h.getName() &#x3C;&#x3C; &#x22; is danger level: &#x22; &#x3C;&#x3C; h.getDanger_level() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; l.getName() &#x3C;&#x3C; &#x22; is danger level: &#x22; &#x3C;&#x3C; l.getDanger_level() &#x3C;&#x3C; endl;
+</code></pre>
+This program outputs:
+<pre><code>
+Fluffy is danger level: 1
+Cecil is danger level: 10
+</code></pre>
+
+<h2 id="async_future_promise">Async, Future, and Promise</h2>
+<h3>Description</h3>
+Future and promoise are two seperate sides of an asynchronous operation Promise acts as a producer and future acts as a consumer. A future will block until it's thread is ready to be joined. The function async creates a new thread and returns a future. The future function has two launch policies: 
+<li>"std::launch::async" which cretes a new thread</li>
+<li>"std::launch::deferred" which does not create a new thread</li>
+By default async decides which launch policy works best at time of execution.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;future&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+int factorial(int input){
+    int output = 1;
+    for(uint i=1;i&#x3C;=input;i++){
+        output *= i;
+    }
+    return output;
+}
+
+int main() {
+    
+    vector&#x3C;future&#x3C;int&#x3E; &#x3E; f;
+    
+    for(int i=1;i&#x3C;11;i++){
+        f.push_back(async(factorial,i));
+    }
+    
+    for(int i=1;i&#x3C;11;i++){
+        cout &#x3C;&#x3C; i &#x3C;&#x3C; &#x22;! = &#x22; &#x3C;&#x3C; f[i-1].get() &#x3C;&#x3C; endl;
+    }
+}
+</code></pre>
+This program outputs:
+<pre><code>1! = 1                                                                
+2! = 2                                                                
+3! = 6                                                                
+4! = 24                                                               
+5! = 120                                                              
+6! = 720                                                              
+7! = 5040                                                             
+8! = 40320                                                            
+9! = 362880                                                           
+10! = 3628800 
+</code></pre>
+
 <h2 id="atomic_datatypes">Atomic Datatypes</h2>
 <h3>Description</h3>
 Atomic datatypes are datatypes that have all of their member functions execute as a single transaction. They are similar to mutexes, except they are signifigantly faster due to cache level optimization. Atomic datatypes do not inherit all of the member functions of their parent datatype. For example, in most cases, mulitply is not overloaded. Overloaded operators are good for making atomic datatypes readable, but in practice the atomic member functions help you write more "correct" code. Atomic member functions include: load(), store(), exchance(), etc.
@@ -193,6 +303,36 @@ int main()
 This program outputs:
 <pre><code>10
 10
+</code></pre>
+
+<h2 id="auto">Auto</h2>
+<h3>Description</h3>
+Auto deduces the type of a declared variable from its initialization expression at compile time. There 
+are situations where auto can make code for engineers much more difficult to read.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+class point{
+    
+    public:
+        int x,y;
+    
+        point(int x, int y){
+            this-&#x3E;x = x;
+            this-&#x3E;y = y;
+        }
+};
+
+int main(){
+    auto p = point(1,5); //Deduces the type from the initializer
+    cout &#x3C;&#x3C; p.x &#x3C;&#x3C; &#x22;, &#x22; &#x3C;&#x3C; p.y &#x3C;&#x3C; endl;
+
+    return 0;
+}</code></pre>
+This program outputs:
+<pre><code>1, 5
 </code></pre>
 
 <h2 id="condition_variable">Condition Variables</h2>
@@ -387,6 +527,48 @@ Process #1136, Thread #1
 Encapsulation is the binding of data with the functions which manipulate them. Encapsulation
 reduces complexity, protects our data, and makes our classes easier to change. Through data hiding,
 encapsulation leads to more abstraction.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+
+using namespace std;
+
+class product{
+  double price;
+  string name;
+  
+  public:
+    double getPrice(){
+      return price;  
+    };
+    
+    string getName(){
+      return name;  
+    };
+    
+    void setPrice(double p){
+        price = p;
+    }
+    
+    void setName(string n){
+        name = n;
+    }
+};
+
+int main()
+{
+    product p;
+    p.setPrice(19.99);
+    p.setName(&#x22;Overpriced Hamburger&#x22;);
+    
+    cout &#x3C;&#x3C; &#x22;The &#x22; &#x3C;&#x3C; p.getName() &#x3C;&#x3C; &#x22; is $&#x22; &#x3C;&#x3C; p.getPrice();
+
+    return 0;
+}
+</code></pre>
+This progam outputs:
+<pre><code>The Overpriced Hamburger is $19.99
+</code></pre>
 
 <h2 id="detached_threads">Detached Threads</h2>
 <h3>Description</h3>
@@ -463,6 +645,176 @@ This program outputs:
 2
 0
 270
+</code></pre>
+
+<h2 id="final">Final</h2>
+<h3>Description</h3>
+Final is a keyword which specifies a virutal function which cannot be overwritten.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class fish{
+    public:
+        virtual void print_home() final{
+            cout &#x3C;&#x3C; &#x22;Ocean&#x22; &#x3C;&#x3C; endl;
+        };
+        void print_shape(){
+            cout &#x3C;&#x3C; &#x22;Long&#x22; &#x3C;&#x3C; endl;
+        };
+};
+
+class flounder : public fish{
+    
+    public:
+        //Not allowed, would return error
+        // void print_home(){
+        //     cout &#x3C;&#x3C; &#x22;Sand&#x22; &#x3C;&#x3C; endl;
+        // };
+        
+        void print_shape(){
+            cout &#x3C;&#x3C; &#x22;Flat&#x22; &#x3C;&#x3C; endl;
+        }
+    
+};
+
+int main(){
+    fish f1;
+    f1.print_home();
+    f1.print_shape();
+    
+    flounder f2;
+    f2.print_home();
+    f2.print_shape();
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Ocean
+Long
+Ocean
+Flat
+</code></pre>
+
+<h2 id="friend_class">Friend Class</h2>
+<h3>Description</h3>
+A friend class in C++ can access the private and protected members of the class in which it was declared as a friend. A derived class cannot give itself access to it's parent class's private. Proper use of friend classes increases encapsulation.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class flower;
+
+class petal{
+    string color;
+    friend flower;
+    
+    public:
+        string getColor(){
+            return color;
+        }
+};
+
+class flower{
+    public:
+        vector&#x3C;petal&#x3E; ps;
+        void set_color(string c){
+            for(auto &#x26;v : ps){
+                v.color = c;
+            }
+        }
+        
+};
+
+int main()
+{
+    flower f;
+    f.ps.push_back(petal());
+    f.ps.push_back(petal());
+    f.ps.push_back(petal());
+    f.set_color(&#x22;periwinkle&#x22;);
+    for(auto &#x26;v : f.ps){
+        cout &#x3C;&#x3C; v.getColor() &#x3C;&#x3C; endl;
+    }
+   
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>periwinkle
+periwinkle
+periwinkle
+</code></pre>
+
+<h2 id="friend_function">Friend Function</h2>
+<h3>Description</h3>
+A function that is given access to private and protected data. They are defined outside of the class scope.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class grass{
+    double length;
+    
+    friend void cut(grass &#x26;g);
+    
+    public:
+        double getLength(){
+            return length;
+        };
+    
+        grass(double l){
+            length = l;
+        }
+
+};
+
+void cut(grass &#x26;g){
+    g.length = 3;
+}
+
+int main()
+{
+    grass g1(5);
+    grass g2(3);
+    grass g3(6);
+    
+    cout &#x3C;&#x3C; &#x22;Before cut&#x22; &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g1.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g2.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g3.getLength() &#x3C;&#x3C; endl;
+    
+    cut(g1);
+    cut(g2);
+    cut(g3);
+
+    cout &#x3C;&#x3C; endl &#x3C;&#x3C; &#x22;After cut&#x22; &#x3C;&#x3C; endl;    
+    cout &#x3C;&#x3C; g1.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g2.getLength() &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; g3.getLength() &#x3C;&#x3C; endl;
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Before cut
+5
+3
+6
+
+After cut
+3
+3
+3
 </code></pre>
 
 <h2 id="inline">Inline Functions</h2>
@@ -793,10 +1145,135 @@ With Mutexes:
  Hello I am 1
 </code></pre>
 
+<h2 id="no_except">No Except</h2>
+<h3>Description</h3>
+Noexcept is a specifier which makes it so that a function is not allowed to throw an exception.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+double the_number_two() noexcept {
+    //throw 2; THIS WOULD CAUSE AN ERROR
+    return 2;
+}
+
+int main(){
+    the_number_two();
+    return 0;
+}
+</code></pre>
+
+<h2 id="call_once_flag">Call_once Flag</h2>
+<h3>Description</h3>
+The call once flag ensures that a callable is only called once. The "call_once()" function take a once_flag and callable function as parameters.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;mutex&#x3E;
+#include &#x3C;time.h&#x3E;
+#include &#x3C;chrono&#x3E;
+
+using namespace std;
+
+once_flag flag;
+string x;
+
+void get_time(){
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&#x26;now);
+    strftime(buf, sizeof(buf), &#x22;%Y-%m-%d.%X&#x22;, &#x26;tstruct);
+    
+    x = buf;
+}
+
+int main(){
+    
+    call_once(flag,get_time);
+    cout &#x3C;&#x3C; x &#x3C;&#x3C; endl;
+    call_once(flag,get_time);
+    cout &#x3C;&#x3C; x &#x3C;&#x3C; endl;
+    call_once(flag,get_time);
+    cout &#x3C;&#x3C; x &#x3C;&#x3C; endl;
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>2020-12-13.22:18:36
+2020-12-13.22:18:36
+2020-12-13.22:18:36
+</code></pre>
+
+<h2 id="override_keyword">Override Keyword</h2>
+<h3>Description</h3>
+The override keyword shows the reader of the code that you are overriding a 
+virtual function. When this keyword is used, the compiler will verify that your function is being overridden. Good C++ software engineers prefer compie time errors over runtime errors.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+class item{
+    public:
+        virtual double price() = 0;
+};
+
+class banana : public item{
+    public:
+        double price() override {
+            return 1.00;
+        }
+};
+
+int main()
+{
+    item* i = new banana();
+    cout &#x3C;&#x3C; i-&#x3E;price() &#x3C;&#x3C; endl;
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>1
+</code></pre>
+
 <h2 id="inherience_types">Predicate</h2>
 <h3>Description</h3>
 Predicates are any callable function which returns a bool. Many STL algorithms use
 predicates as input. For example, all_of(), any_of(), and none_of().
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;algorithm&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+//This is a predicate
+bool is_positive(int i){
+    if(i) return true;
+    return false;
+}
+
+int main() {
+    
+    vector&#x3C;int&#x3E; nums = {0,1,-5,5,9,-9};
+    
+    cout &#x3C;&#x3C; all_of(nums.begin(),nums.end(),is_positive) &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; any_of(nums.begin(),nums.end(),is_positive) &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; none_of(nums.begin(),nums.end(),is_positive) &#x3C;&#x3C; endl;
+
+    return 0;
+}
+</code></pre>
+
+This program outputs:
+<pre><code>0
+1
+0
+</code></pre>
 
 <h2 id="inherience_types">Public VS Protected VS Private Inherience</h2>
 <h3>Description</h3>
@@ -942,6 +1419,69 @@ This program outputs:
 Deleted
 </code></pre>
 
+<h2 id="scoped_lock">Scoped Lock</h2>
+<h3>Description</h3>
+A scoped lock locks an arbitrary number of mutexes and avoids deadlocks. If you use scoped lock with only one lock, it works 
+very similar to lock_guard.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;mutex&#x3E;
+#include &#x3C;thread&#x3E;
+#include &#x3C;unistd.h&#x3E;
+
+using namespace std;
+
+int num_cheese = 10;
+int num_bread = 20;
+int num_sandwichs = 0;
+
+mutex m1,m2,m3;
+
+int main()
+{
+    for(int i=0;i&#x3C;10;i++){
+        thread t([i]{
+            scoped_lock s(m1,m2,m3);
+            num_cheese -= 1;
+            num_bread -= 2;
+            num_sandwichs++;
+            cout &#x3C;&#x3C; i &#x3C;&#x3C; &#x22; made their sandwich&#x22; &#x3C;&#x3C; endl;
+            cout &#x3C;&#x3C; &#x22;num_sandwichs: &#x22; &#x3C;&#x3C; num_sandwichs &#x3C;&#x3C; endl;
+            usleep(100);
+        });
+        
+        t.detach();
+    }
+    
+    sleep(1);
+    
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>0 made their sandwich
+num_sandwichs: 1
+4 made their sandwich
+num_sandwichs: 2
+2 made their sandwich
+num_sandwichs: 3
+3 made their sandwich
+num_sandwichs: 4
+1 made their sandwich
+num_sandwichs: 5
+5 made their sandwich
+num_sandwichs: 6
+6 made their sandwich
+num_sandwichs: 7
+7 made their sandwich
+num_sandwichs: 8
+8 made their sandwich
+num_sandwichs: 9
+9 made their sandwich
+num_sandwichs: 10
+</code></pre>
+
 <h2 id="semaphores">Semaphores</h2>
 <h3>Description</h3>
 Used to control access to a common resource. When you create a semaphore you give
@@ -1042,6 +1582,107 @@ This program outputs:
   3 is out
 </code></pre>
 
+<h2 id="shared_lock">Shared Lock</h2>
+<h3>Description</h3>
+Shared locks can be used in conjunction with unique locks to allow multiple readers and exclusive writers. They are similar to 
+unique_locks in that they can be moved but not copied. Shared locks are used for read integrity.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;shared_mutex&#x3E;
+#include &#x3C;mutex&#x3E;
+#include &#x3C;thread&#x3E;
+#include &#x3C;unistd.h&#x3E;
+
+using namespace std;
+
+double price = 0;
+shared_timed_mutex m;
+mutex pm;
+
+void update_price(double p){
+    unique_lock ul(m);
+    price = p;
+    lock_guard&#x3C;mutex&#x3E; lg(pm);
+    cout &#x3C;&#x3C; &#x22;The new price is &#x22; &#x3C;&#x3C; price &#x3C;&#x3C; endl;
+}
+
+double read_price(){
+    shared_lock sl(m);
+    lock_guard&#x3C;mutex&#x3E; lg(pm);
+    cout &#x3C;&#x3C; &#x22;Reading price: &#x22; &#x3C;&#x3C; price &#x3C;&#x3C; endl;
+    return price;
+}
+
+int main(){
+        
+    for(uint i=0;i&#x3C;10;i++){
+        
+        usleep(100);
+        
+        thread t;
+        
+        if(i%3==0){
+            t = thread(update_price,i);
+        }
+        else{
+            t = thread(read_price);
+        }
+    
+        t.detach();
+        
+    }
+    
+    sleep(1);
+    
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>The new price is 0
+Reading price: 0
+Reading price: 0
+The new price is 3
+Reading price: 3
+Reading price: 3
+The new price is 6
+Reading price: 6
+Reading price: 6
+The new price is 9
+</code></pre>
+
+<h2 id="slicing">Slicing</h2>
+<h3>Description</h3>
+Slicing is when you assign an object of a derived class to an instance of a base class, therefore some its information is "sliced" away.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+
+using namespace std;
+
+class vehicle{
+    public:
+        string color = &#x22;red&#x22;;
+};
+
+class truck : public vehicle{
+    public:
+        double bed_size = 5;
+};
+
+int main()
+{
+    vehicle* v = new truck();
+    cout &#x3C;&#x3C; v-&#x3E;color &#x3C;&#x3C; endl;
+    //cout &#x3C;&#x3C; v-&#x3E;bed_size &#x3C;&#x3C; endl; This is sliced away
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>red
+</code></pre>
+
 <h2 id="smart_pointers">Smart Pointer</h2>
 <h3>Description</h3>
 Similar to a pointer except it has automatic memory management. Once the scope
@@ -1098,6 +1739,145 @@ shared deleted
 unique deleted
 </code></pre>
 
+<h2 id="stl_algorithms">STL Algorithms</h2>
+<h3>Description</h3>
+The STL algorithms are a large number of helpful algorithms each implemented with iterator. Some of the algorithms require
+an operator to declared, for example "<". STL algorithms are helpful for writing fast programs quickly.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+#include &#x3C;algorithm&#x3E;
+#include &#x3C;chrono&#x3E;
+#include &#x3C;random&#x3E;
+
+using namespace std;
+
+int main()
+{
+    vector&#x3C;char&#x3E; kemps_deck;
+    for(int i=0;i&#x3C;4;i++){
+        for(int j=0;j&#x3C;9;j++){
+            kemps_deck.push_back(48+j);
+        }
+        kemps_deck.push_back(&#x27;J&#x27;);
+        kemps_deck.push_back(&#x27;Q&#x27;);
+        kemps_deck.push_back(&#x27;K&#x27;);
+        kemps_deck.push_back(&#x27;A&#x27;);
+    }
+    
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    shuffle(kemps_deck.begin(),kemps_deck.end(),default_random_engine(seed)); //from &#x3C;algorithm&#x3E;
+    
+    vector&#x3C;char&#x3E; player1_hand;
+    vector&#x3C;char&#x3E; player2_hand;
+    vector&#x3C;char&#x3E; player3_hand;
+    vector&#x3C;char&#x3E; player4_hand;
+    
+    for(int i=0;i&#x3C;4;i++){
+        player1_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+        player2_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+        player3_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+        player4_hand.push_back(kemps_deck.back());
+        kemps_deck.pop_back();
+    }
+    
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+    sort(player1_hand.begin(),player1_hand.end()); //from &#x3C;algorithm&#x3E;
+
+    cout &#x3C;&#x3C; &#x22;Player 1&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player1_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 1 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Player 2&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player2_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 2 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Player 3&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player3_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 3 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Player 4&#x27;s Hand: &#x22; &#x3C;&#x3C; endl;
+    for(int i=0;i&#x3C;4;i++){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; player4_hand[i] &#x3C;&#x3C; endl;
+    }
+    if(equal(player1_hand.begin()+1,player1_hand.end(),player1_hand.begin())){
+        cout &#x3C;&#x3C; &#x22;   &#x22; &#x3C;&#x3C; &#x22;Player 4 has kemps&#x22; &#x3C;&#x3C; endl;
+    }
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Player 1's Hand: 
+   4
+   6
+   A
+   K
+Player 2's Hand: 
+   7
+   7
+   7
+   7
+   Player 2 has kemps
+Player 3's Hand: 
+   J
+   2
+   8
+   A
+Player 4's Hand: 
+   Q
+   2
+   4
+   J
+</code></pre>
+
+<h2 id="terminate">Terminate</h2>
+<h3>Description</h3>
+Terminate is called automatically in a C++ program when there is an unhandled exception. The function "set_terminate()" 
+allows you to set which function gets called on terminate. 
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+void handle(){
+    cout &#x3C;&#x3C; &#x22;Exception thrown but nothing to catch it...&#x22; &#x3C;&#x3C; endl;
+}
+
+int main(){
+    set_terminate(handle);
+    
+    vector&#x3C;int&#x3E; p;
+    p.at(0);
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+Exception thrown but nothing to catch it...
+bash: line 7: 15928 Aborted                 (core dumped) ./a.out
+</code></pre>
+
 <h2 id="type_generics">Type Generics</h2>
 <h3>Description</h3>
 Allows you write code without stating the actual data type. The use of generics is commonly seen in data structures like array and vector. Generics make our code more reusable.
@@ -1132,6 +1912,55 @@ This program outputs:
 <h3>Description</h3>
 Unique locks on construction locks a mutex and on destruction unlocks a mutex. Unique locks
 differs from lock guards, because they can be unlocked.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;mutex&#x3E;
+#include &#x3C;thread&#x3E;
+#include &#x3C;vector&#x3E;
+#include &#x3C;unistd.h&#x3E;
+
+using namespace std;
+
+mutex m;
+
+int main() {
+    
+    vector&#x3C;thread&#x3E; threads;
+    
+    for(int i=0;i&#x3C;10;i++){
+        threads.push_back( 
+            thread([i]{
+                unique_lock&#x3C;mutex&#x3E; ul(m);
+                cout &#x3C;&#x3C; i &#x3C;&#x3C; &#x22;&#x27;s critical&#x22;;
+                usleep(1*100);
+                cout &#x3C;&#x3C; &#x22; section&#x22;;
+                usleep(1*100);
+                cout &#x3C;&#x3C; endl;
+                usleep(1*100);
+            })
+        );
+    }
+    
+    for(int i=0;i&#x3C;10;i++){
+        threads[i].join();
+    }
+
+    return 0;
+}
+</code></pre>
+
+This program outputs:
+<pre><code>0's critical section                                                              
+3's critical section                                            
+4's critical section                                           
+5's critical section                                            
+6's critical section                                           
+7's critical section                                            
+8's critical section                                            
+2's critical section                                           
+1's critical section                                            
+9's critical section
+</code></pre>
 
 <h2 id="threads">Threads</h2>
 <h3>Description</h3>
@@ -1253,6 +2082,57 @@ Input is 10
   Thread  #3 returns 24
   Thread  #4 returns 36
 Output is 3628800
+</code></pre>
+
+<h2 id="Virtual">Virtual</h2>
+<h3>Description</h3>
+Virtual functions are functions which are defined at runtime. They differ from normal functions, because normal function are defined at compile time.
+Because virtual functions have late binding, they are overridabe and are able to be used for polymorphism.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+class base{
+    public:
+        virtual void print_name(){
+            cout &#x3C;&#x3C; &#x22;base&#x22; &#x3C;&#x3C; endl;
+        };
+        
+        void print_name_non_virtual(){
+           cout &#x3C;&#x3C; &#x22;base&#x22; &#x3C;&#x3C; endl;
+        };
+};
+
+class derived : public base{
+    
+    public:
+        void print_name(){
+            cout &#x3C;&#x3C; &#x22;derived&#x22; &#x3C;&#x3C; endl;
+        };  
+        
+        void print_name_non_virtual(){
+           cout &#x3C;&#x3C; &#x22;derived&#x22; &#x3C;&#x3C; endl;
+        };
+};
+
+int main(){
+
+    derived d;
+    base* bptr = &#x26;d;
+    
+    bptr-&#x3E;print_name(); //derived
+    bptr-&#x3E;print_name_non_virtual(); //base
+    bptr-&#x3E;base::print_name_non_virtual(); //base
+
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+derived
+base
+base
 </code></pre>
 
 <h2 id="volatile">Volatile</h2>

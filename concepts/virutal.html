@@ -1,0 +1,50 @@
+<h2 id="Virtual">Virtual</h2>
+<h3>Description</h3>
+Virtual functions are functions which are defined at runtime. They differ from normal functions, because normal function are defined at compile time.
+Because virtual functions have late binding, they are overridabe and are able to be used for polymorphism.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+class base{
+    public:
+        virtual void print_name(){
+            cout &#x3C;&#x3C; &#x22;base&#x22; &#x3C;&#x3C; endl;
+        };
+        
+        void print_name_non_virtual(){
+           cout &#x3C;&#x3C; &#x22;base&#x22; &#x3C;&#x3C; endl;
+        };
+};
+
+class derived : public base{
+    
+    public:
+        void print_name(){
+            cout &#x3C;&#x3C; &#x22;derived&#x22; &#x3C;&#x3C; endl;
+        };  
+        
+        void print_name_non_virtual(){
+           cout &#x3C;&#x3C; &#x22;derived&#x22; &#x3C;&#x3C; endl;
+        };
+};
+
+int main(){
+
+    derived d;
+    base* bptr = &#x26;d;
+    
+    bptr-&#x3E;print_name(); //derived
+    bptr-&#x3E;print_name_non_virtual(); //base
+    bptr-&#x3E;base::print_name_non_virtual(); //base
+
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>
+derived
+base
+base
+</code></pre>

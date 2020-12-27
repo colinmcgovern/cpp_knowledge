@@ -1,0 +1,62 @@
+<h2 id="scoped_lock">Scoped Lock</h2>
+<h3>Description</h3>
+A scoped lock locks an arbitrary number of mutexes and avoids deadlocks. If you use scoped lock with only one lock, it works 
+very similar to lock_guard.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;mutex&#x3E;
+#include &#x3C;thread&#x3E;
+#include &#x3C;unistd.h&#x3E;
+
+using namespace std;
+
+int num_cheese = 10;
+int num_bread = 20;
+int num_sandwichs = 0;
+
+mutex m1,m2,m3;
+
+int main()
+{
+    for(int i=0;i&#x3C;10;i++){
+        thread t([i]{
+            scoped_lock s(m1,m2,m3);
+            num_cheese -= 1;
+            num_bread -= 2;
+            num_sandwichs++;
+            cout &#x3C;&#x3C; i &#x3C;&#x3C; &#x22; made their sandwich&#x22; &#x3C;&#x3C; endl;
+            cout &#x3C;&#x3C; &#x22;num_sandwichs: &#x22; &#x3C;&#x3C; num_sandwichs &#x3C;&#x3C; endl;
+            usleep(100);
+        });
+        
+        t.detach();
+    }
+    
+    sleep(1);
+    
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>0 made their sandwich
+num_sandwichs: 1
+4 made their sandwich
+num_sandwichs: 2
+2 made their sandwich
+num_sandwichs: 3
+3 made their sandwich
+num_sandwichs: 4
+1 made their sandwich
+num_sandwichs: 5
+5 made their sandwich
+num_sandwichs: 6
+6 made their sandwich
+num_sandwichs: 7
+7 made their sandwich
+num_sandwichs: 8
+8 made their sandwich
+num_sandwichs: 9
+9 made their sandwich
+num_sandwichs: 10
+</code></pre>

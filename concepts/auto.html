@@ -1,0 +1,29 @@
+<h2 id="auto">Auto</h2>
+<h3>Description</h3>
+Auto deduces the type of a declared variable from its initialization expression at compile time. There 
+are situations where auto can make code for engineers much more difficult to read.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+class point{
+    
+    public:
+        int x,y;
+    
+        point(int x, int y){
+            this-&#x3E;x = x;
+            this-&#x3E;y = y;
+        }
+};
+
+int main(){
+    auto p = point(1,5); //Deduces the type from the initializer
+    cout &#x3C;&#x3C; p.x &#x3C;&#x3C; &#x22;, &#x22; &#x3C;&#x3C; p.y &#x3C;&#x3C; endl;
+
+    return 0;
+}</code></pre>
+This program outputs:
+<pre><code>1, 5
+</code></pre>
