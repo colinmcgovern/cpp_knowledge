@@ -102,7 +102,7 @@ a:hover {
   font-size: 18px;
   border: none;
   outline: none;
-  background-color: red;
+  background-color: #F99156;
   color: white;
   cursor: pointer;
   padding: 15px;
@@ -110,5 +110,5 @@ a:hover {
 }
 
 #goto_top:hover {
-  background-color: #555;
+  background-color: #fbbd99;
 }
