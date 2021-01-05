@@ -4,10 +4,37 @@
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css"> -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+
 </head>
 
 <h1 id="home">Colin's C++ & Object Oriented Programming Guide</h1>
 Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by teaching</a> to find gaps in my C++/ OOP knowledge.
+
+<!-- GOTO Top button start -->
+<button onclick="topFunction()" id="goto_top" title="Go to top">Top</button>
+
+<script>
+//Get the button
+var mybutton = document.getElementById("goto_top");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+<!-- GOTO Top button stop -->
 
 <h2>Table of Contents</h2>
 <li><a href="#abstraction">Abstraction</li>
@@ -868,8 +895,8 @@ inline took 0 milliseconds
 <h2 id="interfaces">Interfaces</h2>
 <h3>Description</h3>
 <h3>Example</h3>
-<pre><code>Interfaces are used to separate the declaration from the implementation. Implementation of an interface is done with run-time polymorphism. An abstract class that only has pure abstract classes is an interface. Pure virtual functions are virtual functions which end in "=0";
-</code></pre>
+Interfaces are used to separate the declaration from the implementation. Implementation of an interface is done with run-time polymorphism. An abstract class that only has pure abstract classes is an interface. Pure virtual functions are virtual functions which end in "=0";
+<code><pre>
 <h3>Example</h3>#include &#x3C;iostream&#x3E;
 
 using namespace std;
@@ -1240,7 +1267,7 @@ This program outputs:
 <pre><code>1
 </code></pre>
 
-<h2 id="inherience_types">Predicate</h2>
+<h2 id="predicate">Predicate</h2>
 <h3>Description</h3>
 Predicates are any callable function which returns a bool. Many STL algorithms use
 predicates as input. For example, all_of(), any_of(), and none_of().
@@ -2084,7 +2111,7 @@ Input is 10
 Output is 3628800
 </code></pre>
 
-<h2 id="Virtual">Virtual</h2>
+<h2 id="virtual">Virtual</h2>
 <h3>Description</h3>
 Virtual functions are functions which are defined at runtime. They differ from normal functions, because normal function are defined at compile time.
 Because virtual functions have late binding, they are overridabe and are able to be used for polymorphism.
