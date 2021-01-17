@@ -8,7 +8,7 @@
 </head>
 
 <h1 id="home">Colin's C++ & Object Oriented Programming Guide</h1>
-Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by teaching</a> to find gaps in my C++/ OOP knowledge.
+Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by teaching</a> to find gaps in my C++/ OOP knowledge. <i>"C++ is a general-purpose programming language with a bias towards systems programming that is better than C, supports data abstraction, supports object-oriented programming and supports generic programming"</i> -Bjarne Stroustrup
 
 <!-- GOTO Top button start -->
 <button onclick="topFunction()" id="goto_top" title="Go to top">Go To Top</button>
@@ -684,13 +684,12 @@ t1 done
 <h3>Description</h3>
 The diamond problem of inheritance is an issue where multiple inheritance can lead to ambigious data. The diamond problem is the following:
 <li>We have four classes: A, B, C, and D</li>
-<li>A has an uinitialized public member e</li>
-<li>B and C publically inherit A and initialize e</li>
-<li>D publically inherits B and C</li>
+<li>A has an uninitialized public member e</li>
+<li>B and C publicaly inherit A and initialize e</li>
+<li>D publicaly inherits B and C</li>
 <li>What is the value of e when you initialize D?</li>
 <h3>Example</h3>
-<code><pre>
-#include &#x3C;iostream&#x3E;
+<code><pre>#include &#x3C;iostream&#x3E;
 #include &#x3C;string&#x3E;
 
 using namespace std;
@@ -1447,7 +1446,7 @@ This program outputs:
 
 <h2 id="pimpl">PIMPL Idiom</h2>
 <h3>Description</h3>
-The PIMPL idiom is when you move all private members of a class from its header file to its implementation file. This provides two benefits: less complilation time when do change a file's private members and more data hiding which improves data abstraction and security if your library is confidential. The private members are moved to the implemenation file by:
+The PIMPL idiom is when you move all private members of a class from its header file to its implementation file. This provides two benefits: less complilation time when change a class's private members and more data hiding which improves abstraction. PIMPL is useful if your library is confidential. The private members are moved to the implemenation file by:
 <li>Forward declaring an "IMPL" class as a public member in the header</li>
 <li>Declaring an unique pointer to the "IMPL" class</li>
 <li>Defining the "IMPL" class as a struct in the implmentation file containg all of the private members</li>
@@ -2442,7 +2441,7 @@ vector: 9 list: 9 array: 9
 
 <h2 id="virtual">Virtual</h2>
 <h3>Description</h3>
-Virtual functions are functions which are defined at runtime. This is called late-binding. They differ from normal functions, because normal function are defined at compile time AKA early-binding. Because virtual functions use late binding, they are overridable and are able to benefit from polymorphism. The implementation of the virtual method is decided by the pointer that you call it through.
+Virtual functions are functions which are defined at runtime. This is called late-binding. They differ from normal functions, because normal function are defined at compile time AKA early-binding. Because virtual functions use late binding, they are overridable and are able to benefit from polymorphism. The implementation of the virtual method is decided by the pointer which you call it through.
 <h3>Example</h3>
 <pre><code>#include &#x3C;iostream&#x3E;
 
