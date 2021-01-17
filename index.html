@@ -4,14 +4,14 @@
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css"> -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-
+<title>Colin's C++ & Object Oriented Programming Guide</title>
 </head>
 
 <h1 id="home">Colin's C++ & Object Oriented Programming Guide</h1>
 Using <a href="https://en.wikipedia.org/wiki/Learning_by_teaching">learning by teaching</a> to find gaps in my C++/ OOP knowledge.
 
 <!-- GOTO Top button start -->
-<button onclick="topFunction()" id="goto_top" title="Go to top">Top🠕</button>
+<button onclick="topFunction()" id="goto_top" title="Go to top">Go To Top</button>
 
 <script>
 //Get the button
@@ -46,10 +46,13 @@ function topFunction() {
 <li><a href="#condition_variable">Condition Variables</a></li>
 <li><a href="#const">Const</a></li>
 <li><a href="#deadlocks">Deadlocks</a></li>
+<li><a href="#dependency_injection">Dependency Injection</a></li>
 <li><a href="#detached_threads">Detached Threads</a></li>
+<li><a href="#diamond_problem">Diamond Problem of Inheritance</a></li>
 <li><a href="#threads_vs_processes">Difference between a thread and a process</a></li>
 <li><a href="#encapsulation">Encapsulation</li>
 <li><a href="#enumerations">Enumerations</a></li>
+<li><a href="#factory_method">Factory Method</a></li>
 <li><a href="#final">Final</a></li>
 <li><a href="#friend_class">Friend class</a></li>
 <li><a href="#friend_function">Friend function</a></li>
@@ -64,23 +67,27 @@ function topFunction() {
 <li><a href="#overloading">Overloading</a></li>
 <li><a href="#overridding">Overridding</a></li>
 <li><a href="#override_keyword">Override Keyword</a></li>
+<li><a href="#pimpl">PIMPL Idiom</a></li>
 <li><a href="#polymorphism">Polymorphism</a></li>
 <li><a href="#predicate">Predicate</a></li>
 <li><a href="#inherience_types">Public VS Protected VS Private Inherience</li>
 <li><a href="#race_conditions">Race Conditions</a></li>
 <li><a href="#raii">RAII</a></li>
+<li><a href="#reference_vs_pointer">Reference vs Pointer</a></li>
 <li><a href="#scoped_lock">Scoped Lock</a></li>
 <li><a href="#semaphores">Semaphores</a></li>
 <li><a href="#shared_lock">Shared Lock</a></li>
 <li><a href="#shared_pointers">Shared pointers</a></li>
 <li><a href="#singleton_pattern">Singleton Pattern</a></li>
 <li><a href="#smart_pointers">Smart Pointers</a></li>
+<li><a href="#static_vs_dynamic_memory">Static vs Dynamic Memory</a></li>
 <li><a href="#stl_algorithms">STL Algorithms</a></li>
 <li><a href="#terminate">Terminate</a></li>
 <li><a href="#threads">Threads</a></li>
 <li><a href="#type_generics">Type Generics</a></li>
 <li><a href="#unique_locks">Unique Locks</a></li>
 <li><a href="#unique_pointers">Unique Pointers</a></li>
+<li><a href="#vector_vs_list_vs_array">Vector vs List vs Array</a></li>
 <li><a href="#virtual">Virtual</a></li>
 <li><a href="#volatile">Volatile</a></li>
 <li><a href="#weak_pointers">Weak Pointers</a></li>
@@ -597,6 +604,34 @@ This progam outputs:
 <pre><code>The Overpriced Hamburger is $19.99
 </code></pre>
 
+<h2 id="dependency_injection">Dependency Injection</h2>
+<h3>Description</h3>
+Dependency injection is providing the service objects that a client object needs instead of having the client object define the service objects themselves. Dependency injection can make testing and configuration easier, but can lead to less readable code.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+class service{
+};
+
+class client{
+    
+    service myService;
+    
+    public:
+        client(service s){
+        }
+};
+
+int main()
+{
+    service s;
+    client c(s);
+    return 0;
+}
+</code></pre>
+
 <h2 id="detached_threads">Detached Threads</h2>
 <h3>Description</h3>
 Detached threads are threads that have had their "detached()" member function called. They cannot be joined. When a detached thread is done, its resources are destroyed safely.
@@ -645,6 +680,88 @@ t2 done
 t1 done
 </code></pre>
 
+<h2 id="diamond_problem">Diamond Probelem of Inheritance</h2>
+<h3>Description</h3>
+The diamond problem of inheritance is an issue where multiple inheritance can lead to ambigious data. The diamond problem is the following:
+<li>We have four classes: A, B, C, and D</li>
+<li>A has an uinitialized public member e</li>
+<li>B and C publically inherit A and initialize e</li>
+<li>D publically inherits B and C</li>
+<li>What is the value of e when you initialize D?</li>
+<h3>Example</h3>
+<code><pre>
+#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+
+using namespace std;
+
+class animal{   
+    
+    public:
+        virtual string says(){
+            return &#x22;generic sound&#x22;;
+        }
+        
+        animal(){
+            cout &#x3C;&#x3C; &#x22;animal init&#x22; &#x3C;&#x3C; endl;
+        }
+        
+        double height, width;
+};
+
+//virtual here allows for says() function to not be ambigious
+class duck : virtual public animal {
+    public:
+        string says(){
+            return &#x22;quack&#x22;;
+        }
+        
+        duck(){
+            cout &#x3C;&#x3C; &#x22;duck init&#x22; &#x3C;&#x3C; endl;
+        }
+};
+
+//virtual here allows for says() function to not be ambigious
+class mammal : virtual public animal{
+    public:
+        string says(){
+            return &#x22;generic mammal sound&#x22;;
+        }
+        
+        mammal(){
+            cout &#x3C;&#x3C; &#x22;mammal init&#x22; &#x3C;&#x3C; endl;
+        }
+};
+
+class platypus: public duck,mammal{
+    public:
+    string says(){
+        return &#x22;platypus sound&#x22;;
+    }
+    
+    platypus(){
+        cout &#x3C;&#x3C; &#x22;platypus init&#x22; &#x3C;&#x3C; endl;
+    }
+};
+
+
+int main()
+{
+    animal *a = new platypus();
+    cout &#x3C;&#x3C; a-&#x3E;says() &#x3C;&#x3C; endl;
+    
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>animal init
+duck init
+mammal init
+platypus init
+platypus sound
+</code></pre>
+
+
 <h2 id="enumerations">Enumerations</h2>
 <h3>Description</h3>
 A user defined set of named constants. It is a way of associating names with integers.
@@ -672,6 +789,65 @@ This program outputs:
 2
 0
 270
+</code></pre>
+
+<h2 id="factory_method">Factory Method</h2>
+<h3>Description</h3>
+A factory method is a design pattern that lets you create a derived class at run time. A factory method returns a pointer to a virtual class. The virtual class is initalized as a derived class. Factory methods are needed with C++, becuase virtual constructors are not supported.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;memory&#x3E;
+using namespace std;
+
+class machine_ops{
+    public:
+        static machine_ops *make_instance(bool isLinux);
+        virtual void power_off() = 0;
+        virtual void reset() = 0;
+};
+
+class linux : public machine_ops{
+    public:
+        void power_off(){
+            cout &#x3C;&#x3C; &#x22;Powering off Linux style&#x22; &#x3C;&#x3C; endl;
+        }
+        
+        void reset(){
+            cout &#x3C;&#x3C; &#x22;Resetting Linux style&#x22; &#x3C;&#x3C; endl;
+        }
+};
+
+class windows : public machine_ops{
+    public:
+        void power_off(){
+            cout &#x3C;&#x3C; &#x22;Powering off Windows style&#x22; &#x3C;&#x3C; endl;
+        }
+        
+        void reset(){
+            cout &#x3C;&#x3C; &#x22;Resetting Windows style&#x22; &#x3C;&#x3C; endl;
+        }
+};
+
+machine_ops* machine_ops::make_instance(bool is_linux){
+    if(is_linux){
+        return new linux();
+    }else{
+        return new windows();
+    }
+}
+
+int main() {
+&#x9;
+&#x9;machine_ops* m = machine_ops::make_instance(1);
+&#x9;m-&#x3E;power_off();
+&#x9;m-&#x3E;reset();
+&#x9;
+&#x9;return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>Powering off Linux style
+Resetting Linux style
 </code></pre>
 
 <h2 id="final">Final</h2>
@@ -944,10 +1120,12 @@ I love learning
 
 <h2 id="inheritance">Inheritance</h2>
 <h3>Description</h3>
-Inheritance is when you define a class in terms of another class. It allows us to write less code. Less code = less opportunities 
+Inheritance is when you define a class in terms of another class. It allows us to write less code. Less code equals less opportunities 
 for bugs. Inheritance is a "is a" relationship. For example, a vehicle IS A car. There are three kinds of inheritance: public,
 protected, and private. A derived class inherits all of the base class's methods except for: constructors, destructors, copy constructors, 
 overloaded operators, and friend functions. 
+
+When a derived class overrides a method from its parent, not only does the overriden function become hidden, but all of the overloaded methods of the parent become hidden too. These hidden parent methods can still be access using their scope resolution operator.
 <h3>Example</h3>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;string&gt;
@@ -1267,6 +1445,59 @@ This program outputs:
 <pre><code>1
 </code></pre>
 
+<h2 id="pimpl">PIMPL Idiom</h2>
+<h3>Description</h3>
+The PIMPL idiom is when you move all private members of a class from its header file to its implementation file. This provides two benefits: less complilation time when do change a file's private members and more data hiding which improves data abstraction and security if your library is confidential. The private members are moved to the implemenation file by:
+<li>Forward declaring an "IMPL" class as a public member in the header</li>
+<li>Declaring an unique pointer to the "IMPL" class</li>
+<li>Defining the "IMPL" class as a struct in the implmentation file containg all of the private members</li>
+<li>And finally initalizing the "IMPL" class in the main class's constructor</li>
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+#include &#x3C;memory&#x3E;
+
+using namespace std;
+
+//HEADER FILE
+class launch_nuclear_missle {
+    private:
+        class IMPL;
+        unique_ptr&#x3C;IMPL&#x3E; impl_;
+    public:
+        launch_nuclear_missle();
+};
+
+//IMPLEMENTATION FILE
+struct launch_nuclear_missle::IMPL{
+    void call_president(); //We don&#x27;t want anyone seeing this
+    void call_general(); //We don&#x27;t want anyone seeing this
+};
+
+launch_nuclear_missle::launch_nuclear_missle() : impl_(new IMPL){
+    impl_-&#x3E;call_president();
+    impl_-&#x3E;call_general();
+}
+
+void launch_nuclear_missle::IMPL::call_president(){
+    cout &#x3C;&#x3C; &#x22;Calling Mr. President...&#x22; &#x3C;&#x3C; endl;
+}
+
+void launch_nuclear_missle::IMPL::call_general(){
+    cout &#x3C;&#x3C; &#x22;Calling the general...&#x22; &#x3C;&#x3C; endl;
+}
+
+int main()
+{
+    launch_nuclear_missle();
+    return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>Calling Mr. President...
+Calling the general...
+</code></pre>
+
 <h2 id="predicate">Predicate</h2>
 <h3>Description</h3>
 Predicates are any callable function which returns a bool. Many STL algorithms use
@@ -1295,7 +1526,6 @@ int main() {
     return 0;
 }
 </code></pre>
-
 This program outputs:
 <pre><code>0
 1
@@ -1444,6 +1674,49 @@ int main() {
 This program outputs:
 <pre><code>Created
 Deleted
+</code></pre>
+
+reference_vs_pointer
+
+<h2 id="reference_vs_pointer">Reference Vs. Pointer</h2>
+<h3>Description</h3>
+A pointer holds an address in memory. In order to access the data to this address, the programmer has to use the dereference operator "*". References are an alias of an existing variable. One can think of references as a constant pointer who's value can be changed, but its address cannot.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+using namespace std;
+
+int main() {
+&#x9;
+&#x9;int* ptr = new int(0);
+&#x9;int&#x26; ref = *ptr;
+&#x9;
+&#x9;cout &#x3C;&#x3C; &#x22;ptr address: &#x22; &#x3C;&#x3C; ptr &#x3C;&#x3C; endl;
+&#x9;cout &#x3C;&#x3C; &#x22;ptr value: &#x22; &#x3C;&#x3C; *ptr &#x3C;&#x3C; endl;
+&#x9;cout &#x3C;&#x3C; &#x22;ref value: &#x22; &#x3C;&#x3C; ref &#x3C;&#x3C; endl &#x3C;&#x3C; endl;
+&#x9;ref++;
+&#x9;cout &#x3C;&#x3C; &#x22;ptr address: &#x22; &#x3C;&#x3C; ptr &#x3C;&#x3C; endl;
+&#x9;cout &#x3C;&#x3C; &#x22;ptr value: &#x22; &#x3C;&#x3C; *ptr &#x3C;&#x3C; endl;
+&#x9;cout &#x3C;&#x3C; &#x22;ref value: &#x22; &#x3C;&#x3C; ref &#x3C;&#x3C; endl &#x3C;&#x3C; endl;
+&#x9;ptr = new int(5);
+&#x9;cout &#x3C;&#x3C; &#x22;ptr address: &#x22; &#x3C;&#x3C; ptr &#x3C;&#x3C; endl;
+&#x9;cout &#x3C;&#x3C; &#x22;ptr value: &#x22; &#x3C;&#x3C; *ptr &#x3C;&#x3C; endl;
+&#x9;cout &#x3C;&#x3C; &#x22;ref value: &#x22; &#x3C;&#x3C; ref &#x3C;&#x3C; endl;
+&#x9;
+&#x9;return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>ptr address: 0x10d2c20
+ptr value: 0
+ref value: 0
+
+ptr address: 0x10d2c20
+ptr value: 1
+ref value: 1
+
+ptr address: 0x10d3c50
+ptr value: 5
+ref value: 1
 </code></pre>
 
 <h2 id="scoped_lock">Scoped Lock</h2>
@@ -1765,6 +2038,14 @@ shared created
 shared deleted
 unique deleted
 </code></pre>
+
+static_vs_dynamic_memory
+
+<h2 id="static_vs_dynamic_memory">Static vs Dynamic memory</h2>
+<h3>Description</h3>
+Static memory lives on heap and dynamic memory lives on the stack. As static memory is allocated, the heap travels down and as dynamic memory is allocated the stack travels up. If the heap and the stack meet each other in the middle, you are out of memory!
+
+Static memory is managed by the compiler and dynamic memory is managed by the programmer. In order to create static data the programmer can use common initialization, for example "int i = 5;". If the programmer wants to create dynamic data, they use "new" or "malloc". "new" or "malloc" allocates memory on the stack and returns the address of the allocated memory. This address is stored in a "pointer". If the program attempts to allocate memory when there is not enough, new would throw a "bad_alloc" and malloc would return a nullptr. If the programmer does not free the dynamically allocated memory, a data leak occurs. 
 
 <h2 id="stl_algorithms">STL Algorithms</h2>
 <h3>Description</h3>
@@ -2111,10 +2392,57 @@ Input is 10
 Output is 3628800
 </code></pre>
 
+<li><a href="#vector_vs_list_vs_array">Vector vs List vs Array</a></li>
+
+<h2 id="vector_vs_list_vs_array">Vector vs List vs Array</h2>
+<h3>Description</h3>
+<li>Lists are doubly linked lists which have O(1) insert and deletion times and O(N) random access time. Their elements may not be in order in memory and are best when you have to store a fixed number of large objects.</li>
+<li>Vectors are dynamic arrays which have O(N) insert and deletion times and O(1) random access time. Their elements are in order and are best for storing many small objects that are randomly accessed often.</li>
+<li>Arrays are inherited from C. They are similar to vectors except they are not resizable, more compact, and don't require STL headers.</li>
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;vector&#x3E;
+#include &#x3C;list&#x3E;
+using namespace std;
+
+int main() {
+&#x9;
+&#x9;
+&#x9;vector&#x3C;int&#x3E; v;
+&#x9;list&#x3C;int&#x3E; l;
+&#x9;int a[10]; //statically allocated
+&#x9;
+&#x9;for(int i=0;i&#x3C;10;i++){
+&#x9;    v.push_back(i);
+&#x9;    l.push_back(i);
+&#x9;    a[i] = i;
+&#x9;}
+&#x9;
+&#x9;for(int i=0;i&#x3C;10;i++){
+&#x9;    cout &#x3C;&#x3C; &#x22;vector: &#x22; &#x3C;&#x3C; v[i] &#x3C;&#x3C;
+&#x9;    &#x22; list: &#x22; &#x3C;&#x3C; *l.begin()+i &#x3C;&#x3C;
+&#x9;    &#x22; array: &#x22; &#x3C;&#x3C; a[i] &#x3C;&#x3C; endl;
+&#x9;}
+&#x9;
+&#x9;return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>vector: 0 list: 0 array: 0
+vector: 1 list: 1 array: 1
+vector: 2 list: 2 array: 2
+vector: 3 list: 3 array: 3
+vector: 4 list: 4 array: 4
+vector: 5 list: 5 array: 5
+vector: 6 list: 6 array: 6
+vector: 7 list: 7 array: 7
+vector: 8 list: 8 array: 8
+vector: 9 list: 9 array: 9
+</code></pre>
+
 <h2 id="virtual">Virtual</h2>
 <h3>Description</h3>
-Virtual functions are functions which are defined at runtime. They differ from normal functions, because normal function are defined at compile time.
-Because virtual functions have late binding, they are overridabe and are able to be used for polymorphism.
+Virtual functions are functions which are defined at runtime. This is called late-binding. They differ from normal functions, because normal function are defined at compile time AKA early-binding. Because virtual functions use late binding, they are overridable and are able to benefit from polymorphism. The implementation of the virtual method is decided by the pointer that you call it through.
 <h3>Example</h3>
 <pre><code>#include &#x3C;iostream&#x3E;
 
