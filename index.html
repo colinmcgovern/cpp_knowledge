@@ -45,6 +45,7 @@ function topFunction() {
 <li><a href="#auto">Auto</a></li>
 <li><a href="#condition_variable">Condition Variables</a></li>
 <li><a href="#const">Const</a></li>
+<li><a href="#context_switching">Context Switching</a></li>
 <li><a href="#deadlocks">Deadlocks</a></li>
 <li><a href="#dependency_injection">Dependency Injection</a></li>
 <li><a href="#detached_threads">Detached Threads</a></li>
@@ -468,6 +469,156 @@ A keyword that specifies that a variable's value is constant and prevents the pr
     //test3 = &amp;b; //Not allowed    
 }
 </pre></code>
+
+<h2 id="context_switching">Context Switching</h2>
+<h3>Description</h3>
+Context switching is the process of storing the state of a process or a thread so that it can be later restored and resume execution at a later point. The act of "switching" from one process/ thread "context" takes time. This switching latency is caused by a number of low level effects. For example, task schedulers, TLB flushes, and CPU cache sharing.<br><br>
+
+The following two examples assume each part of the program takes exactly 1 execution:<br>
+
+<h2>Unoptimized for Context Switching</h2>
+<style type="text/css">
+    table.tableizer-table {
+        font-size: 12px;
+        border: 1px solid #CCC; 
+        font-family: Arial, Helvetica, sans-serif;
+    } 
+    .tableizer-table td {
+        padding: 4px;
+        margin: 3px;
+        border: 1px solid #CCC;
+    }
+    .tableizer-table th {
+        background-color: #104E8B; 
+        color: #FFF;
+        font-weight: bold;
+    }
+</style>
+<table class="tableizer-table">
+<thead><tr class="tableizer-firstrow"><th># OF EXECUTIONS</th><th>THREAD 1</th><th>CONTEXT SWITCHING</th><th>THREAD 2</th></tr></thead><tbody>
+ <tr><td>0</td><td>Lock m1</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>1</td><td>Lock m2</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>2</td><td>Do task</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>3</td><td>Unlock m1</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>4</td><td>&nbsp;</td><td>Switch -></td><td>&nbsp;</td></tr>
+ <tr><td>5</td><td>&nbsp;</td><td>&nbsp;</td><td>Lock m1</td></tr>
+ <tr><td>6</td><td>&nbsp;</td><td><- Switch</td><td>&nbsp;</td></tr>
+ <tr><td>7</td><td>Unlock m2</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>8</td><td>&nbsp;</td><td>&nbsp;</td><td>Lock m2</td></tr>
+ <tr><td>9</td><td>&nbsp;</td><td>&nbsp;</td><td>Do task</td></tr>
+ <tr><td>10</td><td>&nbsp;</td><td>&nbsp;</td><td>Unlock m1</td></tr>
+ <tr><td>11</td><td>&nbsp;</td><td>&nbsp;</td><td>Unlock m2</td></tr>
+</tbody></table>
+
+<h2>Optimized for Context Switching</h2>
+<style type="text/css">
+    table.tableizer-table {
+        font-size: 12px;
+        border: 1px solid #CCC; 
+        font-family: Arial, Helvetica, sans-serif;
+    } 
+    .tableizer-table td {
+        padding: 4px;
+        margin: 3px;
+        border: 1px solid #CCC;
+    }
+    .tableizer-table th {
+        background-color: #104E8B; 
+        color: #FFF;
+        font-weight: bold;
+    }
+</style>
+<table class="tableizer-table">
+<thead><tr class="tableizer-firstrow"><th># OF EXECUTIONS</th><th>THREAD 1</th><th>CONTEXT SWITCHING</th><th>THREAD 2</th></tr></thead><tbody>
+ <tr><td>0</td><td>Lock m1</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>1</td><td>Lock m2</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>2</td><td>Do task</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>3</td><td>Unlock m2</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>4</td><td>Unlock m1</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <tr><td>5</td><td>&nbsp;</td><td>Switch -></td><td>&nbsp;</td></tr>
+ <tr><td>6</td><td>&nbsp;</td><td>&nbsp;</td><td>Lock m1</td></tr>
+ <tr><td>7</td><td>&nbsp;</td><td>&nbsp;</td><td>Lock m2</td></tr>
+ <tr><td>8</td><td>&nbsp;</td><td>&nbsp;</td><td>Do task</td></tr>
+ <tr><td>9</td><td>&nbsp;</td><td>&nbsp;</td><td>Unlock m1</td></tr>
+ <tr><td>10</td><td>&nbsp;</td><td>&nbsp;</td><td>Unlock m2</td></tr>
+</tbody></table>
+
+<h3>Example</h3>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;chrono&gt;
+
+using namespace std;
+
+mutex m0,m1,m2,m3,m4,m5,m6,m7;
+
+int main(){
+    
+    auto t1 = std::chrono::high_resolution_clock::now();
+    
+    vector&lt;thread&gt; lots_of_context_switches;
+
+    for(int i=0;i&lt;20000;i++){
+        
+        int product = 1;
+        
+        lots_of_context_switches.push_back(thread ([i,&amp;product]{
+            m0.lock();
+            m1.lock();
+            
+            product *= i;
+            
+            m0.unlock(); //Unlocking m0 first here causes more context switching
+            m1.unlock(); 
+        }));
+    }
+        
+    for(auto &amp;v : lots_of_context_switches){
+        v.join();
+    }
+    
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::cout &lt;&lt; &quot;lots_of_context_switches took &quot;
+              &lt;&lt; std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t2-t1).count()
+              &lt;&lt; &quot; millisecondsn&quot;;
+              
+    auto t3 = std::chrono::high_resolution_clock::now();
+ 
+    vector&lt;thread&gt; less_context_switches;
+
+    for(int j=0;j&lt;20000;j++){
+        
+        int product = 1;
+        
+        less_context_switches.push_back(thread ([j,&amp;product]{
+            m0.lock();
+            m1.lock();
+            
+            product *= j;
+            
+            m1.unlock(); //Unlocking m1 first here causes less switching
+            m0.unlock();
+            
+        }));
+    }
+        
+    for(auto &amp;v : less_context_switches){
+        v.join();
+    }
+    
+    auto t4 = std::chrono::high_resolution_clock::now();
+    std::cout &lt;&lt; &quot;less_context_switches took &quot;
+              &lt;&lt; std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(t4-t3).count()
+              &lt;&lt; &quot; millisecondsn&quot;;
+}
+</code></pre>
+This program outputs:
+<pre><code>lots_of_context_switches took 1861 milliseconds
+less_context_switches took 1785 milliseconds
+</code></pre>
 
 <h2 id="deadlocks">Deadlocks</h2>
 <h3>Description</h3>
