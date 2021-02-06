@@ -85,6 +85,7 @@ function topFunction() {
 <li><a href="#stl_algorithms">STL Algorithms</a></li>
 <li><a href="#terminate">Terminate</a></li>
 <li><a href="#threads">Threads</a></li>
+<li><a href="#thread_safe_functions">Threads</a></li>
 <li><a href="#type_generics">Type Generics</a></li>
 <li><a href="#unique_locks">Unique Locks</a></li>
 <li><a href="#unique_pointers">Unique Pointers</a></li>
@@ -553,7 +554,7 @@ The following two examples assume each part of the program takes exactly 1 execu
 
 using namespace std;
 
-mutex m0,m1,m2,m3,m4,m5,m6,m7;
+mutex m0,m1;
 
 int main(){
     
@@ -2542,7 +2543,95 @@ Input is 10
 Output is 3628800
 </code></pre>
 
-<li><a href="#vector_vs_list_vs_array">Vector vs List vs Array</a></li>
+<h2 id="thread_safe_functions">What makes a function "thread-safe"</h2>
+<h3>Description</h3>
+
+Functions are thread-safe if they behave correctly during simultaneous executions of threads. The easiest way to have thread safe functions is to have each thread to only use private data or data which is handled with atomic operations. If non-atomic shared data is needed among the threads, the engineer must use mutual exclusion. Mutual exclusion opens a Pandora's box of possible bugs into you software including: deadlocks, race conditions, and starvation. If you must use threads, follow the K.I.S.S. principle: Keep It Simple Stupid!
+
+<h3>Example</h3>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+#include &lt;iostream&gt;
+#include &lt;atomic&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt; 
+#include &lt;unistd.h&gt;
+
+using namespace std;
+
+//Local data only
+void print_index(int size){
+    
+    vector&lt;thread&gt; t;
+    
+    for(int i=0;i&lt;size;i++){
+        t.push_back(thread([i]{
+            cout &lt;&lt; (to_string(i) + &quot; &quot;);
+            sleep(1);
+        }));
+    }
+    
+    for(int i=0;i&lt;size;i++){
+        t[i].join();
+    }
+    cout &lt;&lt; endl;
+}
+
+//Atomic operation only
+int series_sum(int size){
+    
+    atomic&lt;int&gt; output = 0;
+    
+    vector&lt;thread&gt; t;
+    
+    for(int i=0;i&lt;size;i++){
+        t.push_back(thread([&amp;output,i]{
+            output += i;
+        }));
+    }
+    
+    for(int i=0;i&lt;size;i++){
+        t[i].join();
+    }
+    
+    return output;
+}
+
+//Mutual Exclusions
+int series_product(int size){
+    
+    int output = 1;
+    
+    vector&lt;thread&gt; t;
+    
+    mutex m1;
+    
+    for(int i=1;i&lt;=size;i++){
+        t.push_back(thread([&amp;output,i,&amp;m1]{
+            lock_guard&lt;mutex&gt; g1(m1);
+            output *= i;
+        }));
+    }
+    
+    for(int i=0;i&lt;size;i++){
+        t[i].join();
+    }
+    
+    return output;
+}
+
+int main(){
+    print_index(10);
+    cout &lt;&lt; series_sum(1000) &lt;&lt; endl;
+    cout &lt;&lt; series_product(10) &lt;&lt; endl;
+}
+</code></pre>
+This program outputs:
+<pre><code>1 0 2 3 4 5 6 7 8 9 
+499500
+3628800
+</code></pre>
 
 <h2 id="vector_vs_list_vs_array">Vector vs List vs Array</h2>
 <h3>Description</h3>
