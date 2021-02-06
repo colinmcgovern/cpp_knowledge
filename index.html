@@ -85,7 +85,6 @@ function topFunction() {
 <li><a href="#stl_algorithms">STL Algorithms</a></li>
 <li><a href="#terminate">Terminate</a></li>
 <li><a href="#threads">Threads</a></li>
-<li><a href="#thread_safe_functions">Threads</a></li>
 <li><a href="#type_generics">Type Generics</a></li>
 <li><a href="#unique_locks">Unique Locks</a></li>
 <li><a href="#unique_pointers">Unique Pointers</a></li>
@@ -93,6 +92,7 @@ function topFunction() {
 <li><a href="#virtual">Virtual</a></li>
 <li><a href="#volatile">Volatile</a></li>
 <li><a href="#weak_pointers">Weak Pointers</a></li>
+<li><a href="#thread_safe_functions">What makes a function "thread-safe"?</a></li>
 
 <h2 id="abstraction">Abstraction</h2>
 <h3>Description</h3>
@@ -2543,10 +2543,10 @@ Input is 10
 Output is 3628800
 </code></pre>
 
-<h2 id="thread_safe_functions">What makes a function "thread-safe"</h2>
+<h2 id="thread_safe_functions">What makes a function "thread-safe"?</h2>
 <h3>Description</h3>
 
-Functions are thread-safe if they behave correctly during simultaneous executions of threads. The easiest way to have thread safe functions is to have each thread to only use private data or data which is handled with atomic operations. If non-atomic shared data is needed among the threads, the engineer must use mutual exclusion. Mutual exclusion opens a Pandora's box of possible bugs into you software including: deadlocks, race conditions, and starvation. If you must use threads, follow the K.I.S.S. principle: Keep It Simple Stupid!
+Functions are thread-safe if they behave correctly during simultaneous executions of threads. The risk of a function not being thread safe comes entirely from data sharing. The easiest way to have a function be thread-safe is to have each thread only use private data or data which is handled with atomic operations. If non-atomic shared data is needed among the threads, the engineer must use mutual exclusion. Mutual exclusion opens a Pandora's box of possible bugs into your software including: deadlocks, race conditions, and starvation. If you must use threads, follow the K.I.S.S. principle: Keep It Simple Stupid!
 
 <h3>Example</h3>
 <pre><code>#include &lt;stdlib.h&gt;
