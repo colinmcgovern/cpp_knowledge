@@ -61,6 +61,7 @@ function topFunction() {
 <li><a href="#inheritance">Interitance</li>
 <li><a href="#iterators">Iterators</a></li>
 <li><a href="#lambda_functions">Lambda Functions</a></li>
+<li><a href="#lvalue_vs_rvalue">Lvalue vs Rvalue</a></li>
 <li><a href="#mutexes">Mutexes</a></li>
 <li><a href="#no_except">No Except</a></li>
 <li><a href="#once_flag">Once_flag</a></li>
@@ -1428,6 +1429,41 @@ This program outputs:
 2, 1
 3, 3
 4, 4
+</code></pre>
+
+<h2 id="lvalue_vs_rvalue">Lvalue vs Rvalue</h2>
+<h3>Description</h3>
+An lvalue is an object reference and a rvalue is a value. Lvalues have a defined region of storage which has an address, while rvalues do not. A single ampersand is how you do a lvalue reference and a double ampersand is how you do a rvalue reference. Rvalue references were added in C++11.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+#include &#x3C;vector&#x3E;
+
+using namespace std;
+
+void add_and_print(int&#x26; v){
+    v += 1;
+    cout &#x3C;&#x3C; &#x22;lvalue ref: &#x22; &#x3C;&#x3C; v &#x3C;&#x3C; endl;
+}
+
+void add_and_print(int&#x26;&#x26; v){
+    v += 1; //Cannot be accessed later, because it doesn&#x27;t have a set address
+    cout &#x3C;&#x3C; &#x22;rvalue ref: &#x22; &#x3C;&#x3C; v &#x3C;&#x3C; endl;
+}
+
+int main()
+{
+    int x = 5;
+    add_and_print(x);
+    cout &#x3C;&#x3C; x &#x3C;&#x3C; endl &#x3C;&#x3C; endl;
+    
+    add_and_print(5);
+}</code></pre>
+This program outputs:
+<pre><code>lvalue ref: 6
+6
+
+rvalue ref: 6
 </code></pre>
 
 <h2 id="mutexes">Mutexes</h2>
