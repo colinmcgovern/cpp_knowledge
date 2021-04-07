@@ -45,6 +45,7 @@ function topFunction() {
 <li><a href="#condition_variable">Condition Variables</a></li>
 <li><a href="#const">Const</a></li>
 <li><a href="#context_switching">Context Switching</a></li>
+<li><a href="#copy_vs_move">Copy Vs. Move</a></li>
 <li><a href="#deadlocks">Deadlocks</a></li>
 <li><a href="#dependency_injection">Dependency Injection</a></li>
 <li><a href="#detached_threads">Detached Threads</a></li>
@@ -619,6 +620,98 @@ int main(){
 This program outputs:
 <pre><code>lots_of_context_switches took 1861 milliseconds
 less_context_switches took 1785 milliseconds
+</code></pre>
+
+<h2 id="copy_vs_move">Copy Vs. Move</h2>
+<h3>Description</h3>
+std::move() was introducted in C++11 and now allows us to "move" an lvalue from one rvalue to another. When a copy is performed, a complete matching copy of the source rvalue's data is created and given to the destination rvalue. When a move is performed, only the source rvalue's address is moved to destination rvalue. Therefore if you only need to move a lvalue from one rvalue to another, one can save both time and memory by using std::move() instead of performing a copy.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;string&#x3E;
+#include &#x3C;cstring&#x3E;
+#include &#x3C;vector&#x3E;
+#include &#x3C;chrono&#x3E;
+
+using namespace std;
+
+int parseLine(char* line){
+    // This assumes that a digit will be found and the line ends in &#x22; Kb&#x22;.
+    int i = strlen(line);
+    const char* p = line;
+    while (*p &#x3C;&#x27;0&#x27; || *p &#x3E; &#x27;9&#x27;) p++;
+    line[i-3] = &#x27;\0&#x27;;
+    i = atoi(p);
+    return i;
+}
+
+int getValue(){ //Note: this value is in KB!
+    FILE* file = fopen(&#x22;/proc/self/status&#x22;, &#x22;r&#x22;);
+    int result = -1;
+    char line[128];
+
+    while (fgets(line, 128, file) != NULL){
+        if (strncmp(line, &#x22;VmSize:&#x22;, 7) == 0){
+            result = parseLine(line);
+            break;
+        }
+    }
+    fclose(file);
+    return result;
+}
+
+template &#x3C;class T&#x3E; int
+swap_copy(T&#x26; a, T&#x26; b) {
+&#x9;int start_bytes = getValue() * 1000;
+
+    T tmp(a);   // Now there are two copies of a
+    a = b;      // Now there are two copies of b
+    b = tmp;    // Now there are two copies of tmp
+
+    return (getValue() * 1000) - start_bytes;
+}
+
+template &#x3C;class T&#x3E; int
+swap_move(T&#x26; a, T&#x26; b) {
+
+&#x9;int start_bytes = getValue() * 1000;
+
+    T tmp(std::move(a)); //a&#x27;s address moved to tmp
+    a = std::move(b); //b&#x27;s address moved to a
+    b = std::move(tmp); //tmp&#x27;s address moved to b
+
+    return (getValue() * 1000) - start_bytes;
+}
+
+int main(){
+
+&#x9;vector&#x3C;int&#x3E; big_vec1;
+&#x9;vector&#x3C;int&#x3E; big_vec2;
+&#x9;for(int i=0;i&#x3C;10000000;i++){
+&#x9;&#x9;big_vec1.push_back(i);
+&#x9;&#x9;big_vec2.push_back(i);
+&#x9;}
+
+&#x9;auto t1 = std::chrono::high_resolution_clock::now();
+
+&#x9;int copy_bytes = swap_copy&#x3C;vector&#x3C;int&#x3E;&#x3E;(big_vec1, big_vec2);
+
+&#x9;auto t2 = std::chrono::high_resolution_clock::now();
+
+&#x9;int move_bytes = swap_move&#x3C;vector&#x3C;int&#x3E;&#x3E;(big_vec1, big_vec2);
+
+&#x9;auto t3 = std::chrono::high_resolution_clock::now();
+
+&#x9;cout &#x3C;&#x3C; &#x22;swap_copy() took &#x22; &#x3C;&#x3C; copy_bytes &#x3C;&#x3C; &#x22; bytes and &#x22; &#x3C;&#x3C; 
+&#x9;&#x9;std::chrono::duration_cast&#x3C;std::chrono::milliseconds&#x3E;(t2-t1).count() &#x3C;&#x3C; &#x22; milliseconds&#x22; &#x3C;&#x3C; endl;
+
+&#x9;cout &#x3C;&#x3C; &#x22;swap_move() took &#x22; &#x3C;&#x3C; move_bytes &#x3C;&#x3C; &#x22; bytes and &#x22; &#x3C;&#x3C; 
+&#x9;&#x9;std::chrono::duration_cast&#x3C;std::chrono::milliseconds&#x3E;(t3-t2).count() &#x3C;&#x3C; &#x22; milliseconds&#x22; &#x3C;&#x3C; endl;
+&#x9;
+}
+</code></pre>
+This program outputs:
+<pre><code>swap_copy() took 39064000 bytes and 35 milliseconds
+swap_move() took 0 bytes and 0 milliseconds
 </code></pre>
 
 <h2 id="deadlocks">Deadlocks</h2>
