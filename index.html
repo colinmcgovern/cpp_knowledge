@@ -42,6 +42,7 @@ function topFunction() {
 <li><a href="#async_future_promise">Async, Future, and Promise</a></li>
 <li><a href="#atomic_datatypes">Atomic Datatypes</a></li>
 <li><a href="#auto">Auto</a></li>
+<li><a href="#bind">Bind</a></li>
 <li><a href="#condition_variable">Condition Variables</a></li>
 <li><a href="#const">Const</a></li>
 <li><a href="#context_switching">Context Switching</a></li>
@@ -341,6 +342,50 @@ int main()
 This program outputs:
 <pre><code>10
 10
+</code></pre>
+
+<h2 id="bind">Bind</h2>
+<h3>Description</h3>
+Bind() is a function template which generates a forwarding call wrapper for a given function. Calling the wrapper is equalvalent to invoking the function with its binded arguments.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;algorithm&#x3E;
+#include &#x3C;vector&#x3E;
+#include &#x3C;functional&#x3E;
+
+using namespace std;
+
+double noise_gate(double x, double thresh){
+    if(x&#x3C;thresh) return 0;
+    return x;
+}
+
+int main()
+{
+    
+    vector&#x3C;double&#x3E; input;
+    for(double i=-4;i&#x3C;4;i++){
+        input.push_back(i);
+    }
+    
+    transform(input.begin(), input.end(), input.begin(), bind(noise_gate, placeholders::_1, 0));
+    
+    for(auto v : input){
+        cout &#x3C;&#x3C; v &#x3C;&#x3C; endl;
+    }
+    
+    
+}
+</code></pre>
+This program outputs:
+<pre><code>0
+0
+0
+0
+0
+1
+2
+3
 </code></pre>
 
 <h2 id="auto">Auto</h2>
