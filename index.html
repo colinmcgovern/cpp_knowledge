@@ -69,6 +69,7 @@ function topFunction() {
 <li><a href="#overloading">Overloading</a></li>
 <li><a href="#overridding">Overridding</a></li>
 <li><a href="#override_keyword">Override Keyword</a></li>
+<li><a href="#packaged_task">Packaged Task</a></li>
 <li><a href="#pimpl">PIMPL Idiom</a></li>
 <li><a href="#polymorphism">Polymorphism</a></li>
 <li><a href="#predicate">Predicate</a></li>
@@ -1722,6 +1723,65 @@ int main()
 </code></pre>
 This program outputs:
 <pre><code>1
+</code></pre>
+
+<h2 id="packaged_task">Packaged Task</h2>
+<h3>Description</h3>
+A packaged task is a class template that wraps a callable target so that it can be invoked asynchronously. The callable target can be a function, lambda expression, bind expression, or another function object. The packaged task's callable can be executed with the () operator and its return value is gotten with the get_future() member.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;thread&#x3E;
+#include &#x3C;future&#x3E;
+#include &#x3C;functional&#x3E;
+
+using namespace std;
+
+double multiply(double x, double y){
+    cout &#x3C;&#x3C; &#x22;multiply() called&#x22; &#x3C;&#x3C; endl;
+    return x * y;
+}
+
+int main()
+{
+    
+    cout &#x3C;&#x3C; &#x22;Storing tasks&#x22; &#x3C;&#x3C; endl;
+    
+    vector&#x3C;packaged_task&#x3C;double()&#x3E; &#x3E; tasks;
+    vector&#x3C;future&#x3C;double&#x3E; &#x3E; results;
+    
+    for(double i=1;i&#x3C;=2;i++){
+        for(double j=1;j&#x3C;=2;j++){
+            packaged_task&#x3C;double()&#x3E; task(bind(multiply,i,j));
+            
+            results.push_back(task.get_future());
+            tasks.push_back(move(task));
+        }
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Running tasks&#x22; &#x3C;&#x3C; endl;
+    for(auto &#x26;v : tasks){
+        v();    
+    }
+    
+    cout &#x3C;&#x3C; &#x22;Getting Results&#x22; &#x3C;&#x3C; endl;
+    for(auto &#x26;v : results){
+        cout &#x3C;&#x3C; v.get() &#x3C;&#x3C; endl;
+    }
+    
+}
+</code></pre>
+This program outputs:
+<pre><code>Storing tasks
+Running tasks
+multiply() called
+multiply() called
+multiply() called
+multiply() called
+Getting Results
+1
+2
+2
+4
 </code></pre>
 
 <h2 id="pimpl">PIMPL Idiom</h2>
