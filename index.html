@@ -42,6 +42,7 @@ function topFunction() {
 <li><a href="#async_future_promise">Async, Future, and Promise</a></li>
 <li><a href="#atomic_datatypes">Atomic Datatypes</a></li>
 <li><a href="#auto">Auto</a></li>
+<li><a href="#auto_const">Automatically Constructors and Destructors</a></li>
 <li><a href="#bind">Bind</a></li>
 <li><a href="#condition_variable">Condition Variables</a></li>
 <li><a href="#const">Const</a></li>
@@ -416,6 +417,145 @@ int main(){
 }</code></pre>
 This program outputs:
 <pre><code>1, 5
+</code></pre>
+
+<h2 id="auto_const">Automatically Constructors and Destructors</h2>
+<h3>Description</h3>
+In C++, certian constructors and destructors are automatically written by the compilier. The empty constructor "class()" is generated if there isn't any user generated constructor. The copy assignment and constructor are automatically generated if there isn't a move assignment or constructor. The move assignment and constructor are automatically generated if there isn't a copy assignment, copy constructor, or destructor. 
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+
+using namespace std;
+
+class nothing{ };
+
+class copy_assign{
+    public:
+    copy_assign() { cout &#x3C;&#x3C; &#x22;    const&#x22; &#x3C;&#x3C; endl; }
+    copy_assign&#x26; operator=(const copy_assign&#x26; other) { cout &#x3C;&#x3C; &#x22;    copy assign&#x22; &#x3C;&#x3C; endl; return *this; }    
+};
+
+
+class copy_const{
+    public:
+    copy_const() { cout &#x3C;&#x3C; &#x22;    const&#x22; &#x3C;&#x3C; endl; }
+    copy_const(const copy_const &#x26;p1) { cout &#x3C;&#x3C; &#x22;    copy const&#x22; &#x3C;&#x3C; endl; }
+};
+
+class move_assign{
+    public:
+    move_assign() { cout &#x3C;&#x3C; &#x22;    const&#x22; &#x3C;&#x3C; endl; }
+    move_assign&#x26; operator=(const move_assign&#x26; other) { cout &#x3C;&#x3C; &#x22;    move assign&#x22; &#x3C;&#x3C; endl; return *this; }    
+};
+
+class move_const{
+    public:
+    move_const() { cout &#x3C;&#x3C; &#x22;    const&#x22; &#x3C;&#x3C; endl; }
+    move_const(const copy_const &#x26;&#x26;p1) { cout &#x3C;&#x3C; &#x22;    move const&#x22; &#x3C;&#x3C; endl; }
+};
+
+
+int main()
+{
+    cout &#x3C;&#x3C; &#x22;nothing const&#x22; &#x3C;&#x3C; endl;
+    nothing n1;
+    cout &#x3C;&#x3C; &#x22;nothing copy assignment&#x22; &#x3C;&#x3C; endl;
+    nothing n2 = n1;
+    cout &#x3C;&#x3C; &#x22;nothing copy const&#x22; &#x3C;&#x3C; endl;
+    nothing n3(n1);
+    cout &#x3C;&#x3C; &#x22;nothing move assignment&#x22; &#x3C;&#x3C; endl;
+    nothing n4 = std::move(n1);
+    cout &#x3C;&#x3C; &#x22;nothing move const&#x22; &#x3C;&#x3C; endl;
+    nothing n5(std::move(n2));
+    cout &#x3C;&#x3C; endl;
+    
+    cout &#x3C;&#x3C; &#x22;copy_assign const&#x22; &#x3C;&#x3C; endl;
+    copy_assign ca1;
+    cout &#x3C;&#x3C; &#x22;copy_assign copy assignment&#x22; &#x3C;&#x3C; endl;
+    copy_assign ca2 = ca1;
+    cout &#x3C;&#x3C; &#x22;copy_assign copy const&#x22; &#x3C;&#x3C; endl;
+    copy_assign ca3(ca1);
+    cout &#x3C;&#x3C; &#x22;copy_assign move assignment&#x22; &#x3C;&#x3C; endl;
+    copy_assign ca4 = std::move(ca1);
+    cout &#x3C;&#x3C; &#x22;copy_assign move const&#x22; &#x3C;&#x3C; endl;
+    copy_assign ca5(std::move(ca2));
+    cout &#x3C;&#x3C; endl;
+    
+    cout &#x3C;&#x3C; &#x22;copy_const const&#x22; &#x3C;&#x3C; endl;
+    copy_const cc1;
+    cout &#x3C;&#x3C; &#x22;copy_const copy assignment&#x22; &#x3C;&#x3C; endl;
+    copy_const cc2 = cc1;
+    cout &#x3C;&#x3C; &#x22;copy_const copy const&#x22; &#x3C;&#x3C; endl;
+    copy_const cc3(cc1);
+    cout &#x3C;&#x3C; &#x22;copy_const move assignment&#x22; &#x3C;&#x3C; endl;
+    copy_const cc4 = std::move(cc1);
+    cout &#x3C;&#x3C; &#x22;copy_const move const&#x22; &#x3C;&#x3C; endl;
+    copy_const cc5(std::move(cc2));
+    cout &#x3C;&#x3C; endl;
+    
+    cout &#x3C;&#x3C; &#x22;move_assign const&#x22; &#x3C;&#x3C; endl;
+    move_assign ma1;
+    cout &#x3C;&#x3C; &#x22;move_assign copy assignment&#x22; &#x3C;&#x3C; endl;
+    move_assign ma2 = ma1;
+    cout &#x3C;&#x3C; &#x22;move_assign copy const&#x22; &#x3C;&#x3C; endl;
+    move_assign ma3(ma1);
+    cout &#x3C;&#x3C; &#x22;move_assign move assignment&#x22; &#x3C;&#x3C; endl;
+    move_assign ma4 = std::move(ma1);
+    cout &#x3C;&#x3C; &#x22;move_assign move const&#x22; &#x3C;&#x3C; endl;
+    move_assign ma5(std::move(ma2));
+    cout &#x3C;&#x3C; endl;
+
+    cout &#x3C;&#x3C; &#x22;move_const const&#x22; &#x3C;&#x3C; endl;
+    move_const mc1;
+    cout &#x3C;&#x3C; &#x22;move_const copy assignment&#x22; &#x3C;&#x3C; endl;
+    move_const mc2 = mc1;
+    cout &#x3C;&#x3C; &#x22;move_const copy const&#x22; &#x3C;&#x3C; endl;
+    move_const mc3(mc1);
+    cout &#x3C;&#x3C; &#x22;move_const move assignment&#x22; &#x3C;&#x3C; endl;
+    move_const mc4 = std::move(mc1);
+    cout &#x3C;&#x3C; &#x22;move_const move const&#x22; &#x3C;&#x3C; endl;
+    move_const mc5(std::move(mc2));
+    cout &#x3C;&#x3C; endl;
+}
+</code></pre>
+This program outputs:
+<pre><code>nothing const
+nothing copy assignment
+nothing copy const
+nothing move assignment
+nothing move const
+
+copy_assign const
+    const
+copy_assign copy assignment
+copy_assign copy const
+copy_assign move assignment
+copy_assign move const
+
+copy_const const
+    const
+copy_const copy assignment
+    copy const
+copy_const copy const
+    copy const
+copy_const move assignment
+    copy const
+copy_const move const
+    copy const
+
+move_assign const
+    const
+move_assign copy assignment
+move_assign copy const
+move_assign move assignment
+move_assign move const
+
+move_const const
+    const
+move_const copy assignment
+move_const copy const
+move_const move assignment
+move_const move const
 </code></pre>
 
 <h2 id="condition_variable">Condition Variables</h2>
