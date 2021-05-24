@@ -358,12 +358,10 @@ atomic bool, except the load and store operations are not provided. In C++11, th
 
 using namespace std;
 
-enum SynchronisedOutput { IO_Lock, IO_Unlock };
-
-class custom_mutex{
+class spin_lock{
     public:
         
-        custom_mutex(){
+        spin_lock(){
             f.clear();
         }
     
@@ -386,29 +384,29 @@ class custom_mutex{
 
 int main()
 {
-    custom_mutex cm;
+    spin_lock sl;
     
     thread t1([&#x26;] {
         cout &#x3C;&#x3C; &#x22;1 started&#x22; &#x3C;&#x3C; endl;
-        cm.lock();
+        sl.lock();
         usleep(1000);
-        cm.unlock();
+        sl.unlock();
         cout &#x3C;&#x3C; &#x22;1 done&#x22; &#x3C;&#x3C; endl;
     });
     
     thread t2([&#x26;] {
         cout &#x3C;&#x3C; &#x22;2 started&#x22; &#x3C;&#x3C; endl;
-        cm.lock();
+        sl.lock();
         usleep(1000);
-        cm.unlock();
+        sl.unlock();
         cout &#x3C;&#x3C; &#x22;2 done&#x22; &#x3C;&#x3C; endl;
     });
     
     thread t3([&#x26;] {
         cout &#x3C;&#x3C; &#x22;3 started&#x22; &#x3C;&#x3C; endl;
-        cm.lock();
+        sl.lock();
         usleep(1000);
-        cm.unlock();
+        sl.unlock();
         cout &#x3C;&#x3C; &#x22;3 done&#x22; &#x3C;&#x3C; endl;
     });
     
