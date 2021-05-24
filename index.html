@@ -41,6 +41,7 @@ function topFunction() {
 <li><a href="#access_specifiers">Access Specifiers</a></li>
 <li><a href="#async_future_promise">Async, Future, and Promise</a></li>
 <li><a href="#atomic_datatypes">Atomic Datatypes</a></li>
+<li><a href="#atomic_flags">Atomic Flags</a></li>
 <li><a href="#auto">Auto</a></li>
 <li><a href="#auto_const">Automatically Constructors and Destructors</a></li>
 <li><a href="#bind">Bind</a></li>
@@ -343,6 +344,92 @@ int main()
 This program outputs:
 <pre><code>10
 10
+</code></pre>
+
+<h2 id="atomic_flags">Atomic Flags</h2>
+<h3>Description</h3>
+Atomic flag is a data type that is guaranteed to be lock free. Atomic flags are very similar to 
+atomic bool, except the load and store operations are not provided. In C++11, the only functions available for atomic flag are clear() and test_and_set(). Clear() sets the flag to false and test_and_set() returns the value of the flag and sets the flag to true.
+<h3>Example</h3>
+<pre><code>#include &#x3C;thread&#x3E;
+#include &#x3C;iostream&#x3E;
+#include &#x3C;atomic&#x3E;
+#include &#x3C;unistd.h&#x3E;
+
+using namespace std;
+
+enum SynchronisedOutput { IO_Lock, IO_Unlock };
+
+class custom_mutex{
+    public:
+        
+        custom_mutex(){
+            f.clear();
+        }
+    
+        void lock(){
+            while(f.test_and_set()){
+            }
+            cout &#x3C;&#x3C; &#x22;locked&#x22; &#x3C;&#x3C; endl;
+
+        };
+        
+        void unlock(){
+            cout &#x3C;&#x3C; &#x22;unlocked&#x22; &#x3C;&#x3C; endl;
+            f.clear();
+        };
+        
+    private:
+        atomic_flag f;
+};
+
+
+int main()
+{
+    custom_mutex cm;
+    
+    thread t1([&#x26;] {
+        cout &#x3C;&#x3C; &#x22;1 started&#x22; &#x3C;&#x3C; endl;
+        cm.lock();
+        usleep(1000);
+        cm.unlock();
+        cout &#x3C;&#x3C; &#x22;1 done&#x22; &#x3C;&#x3C; endl;
+    });
+    
+    thread t2([&#x26;] {
+        cout &#x3C;&#x3C; &#x22;2 started&#x22; &#x3C;&#x3C; endl;
+        cm.lock();
+        usleep(1000);
+        cm.unlock();
+        cout &#x3C;&#x3C; &#x22;2 done&#x22; &#x3C;&#x3C; endl;
+    });
+    
+    thread t3([&#x26;] {
+        cout &#x3C;&#x3C; &#x22;3 started&#x22; &#x3C;&#x3C; endl;
+        cm.lock();
+        usleep(1000);
+        cm.unlock();
+        cout &#x3C;&#x3C; &#x22;3 done&#x22; &#x3C;&#x3C; endl;
+    });
+    
+    t1.join();
+    t2.join();
+    t3.join();
+}
+</code></pre>
+This program can output:
+<pre><code>2 started
+1 started
+locked
+3 started
+unlocked
+2 done
+locked
+unlocked
+1 done
+locked
+unlocked
+3 done
 </code></pre>
 
 <h2 id="bind">Bind</h2>
