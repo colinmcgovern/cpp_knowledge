@@ -477,8 +477,8 @@ This program outputs:
 
 <h2 id="compare_exchange_weak_vs_strong">Compare Exchange Weak vs Strong</h2>
 <h3>Description</h3>
-Atomic datatypes have public functions which allow them to compare and exchange their value. If the first parameter matches the atomic variable's value, then the variable gets updated to the value of the second parameter. If the first parameter does not match the atomic variable's value, then the first parameter gets updated to the value of the second parameter. The compare and exchange function returns true if the atomic variable is equal to the first parameter's value. If the atomic variable is lock free, then the compare and exchange is only one CPU instruction!
-
+Atomic datatypes have public functions which allow them to compare and exchange their value. If the first parameter matches the atomic variable's value, then the variable gets updated to the value of the second parameter. If the first parameter does not match the atomic variable's value, then the first parameter gets updated to the value of the second parameter. The compare and exchange function returns true if the atomic variable is equal to the first parameter's value and false otherwise. If the atomic variable is lock free, then the compare and exchange is only one CPU instruction~
+<br><br>
 There are two kinds of compare and exchange functions: "weak" and "strong". "compare_exchange_weak()" can have spurious failures, but is faster than "compare_exchange_strong()". However, Compare_exchange_strong can still fail, because of concurrent writes. If you have a compare_exchange_weak() in a loop because you cannot afford a spurious failure, then use a compare_exchange_strong() instead.
 <h3>Example</h3>
 <pre><code>#include &#x3C;iostream&#x3E;
