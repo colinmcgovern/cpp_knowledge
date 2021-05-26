@@ -45,6 +45,7 @@ function topFunction() {
 <li><a href="#auto">Auto</a></li>
 <li><a href="#auto_const">Automatically Constructors and Destructors</a></li>
 <li><a href="#bind">Bind</a></li>
+<li><a href="#compare_exchange_weak_vs_strong">Compare Exchange Weak vs Strong</a></li>
 <li><a href="#condition_variable">Condition Variables</a></li>
 <li><a href="#const">Const</a></li>
 <li><a href="#context_switching">Context Switching</a></li>
@@ -472,6 +473,64 @@ This program outputs:
 1
 2
 3
+</code></pre>
+
+<h2 id="compare_exchange_weak_vs_strong">Compare Exchange Weak vs Strong</h2>
+<h3>Description</h3>
+Atomic datatypes have public functions which allow them to compare and exchange their value. If the first parameter matches the atomic variable's value, then the variable gets updated to the value of the second parameter. If the first parameter does not match the atomic variable's value, then the first parameter gets updated to the value of the second parameter. The compare and exchange function returns true if the atomic variable is equal to the first parameter's value. If the atomic variable is lock free, then the compare and exchange is only one CPU instruction!
+
+There are two kinds of compare and exchange functions: "weak" and "strong". "compare_exchange_weak()" can have spurious failures, but is faster than "compare_exchange_strong()". However, Compare_exchange_strong can still fail, because of concurrent writes. If you have a compare_exchange_weak() in a loop because you cannot afford a spurious failure, then use a compare_exchange_strong() instead.
+<h3>Example</h3>
+<pre><code>#include &#x3C;iostream&#x3E;
+#include &#x3C;unistd.h&#x3E;
+#include &#x3C;atomic&#x3E;
+#include &#x3C;chrono&#x3E;
+
+#define TIME std::chrono::duration_cast&#x3C;std::chrono::milliseconds&#x3E;(std::chrono::system_clock::now().time_since_epoch()).count()
+
+using namespace std;
+
+int main ()
+{
+    atomic&#x3C;int&#x3E; a;
+    a.store(0);
+    int b = 0;
+    
+    double num_weak_fails = 0;
+    auto start = TIME;
+    
+    for(int i=0;i&#x3C;1000000;i++){
+        if(!a.compare_exchange_weak(b,0)){
+            num_weak_fails++;
+        }
+    }
+    
+    cout &#x3C;&#x3C; &#x22;compare_exchange_weak took &#x22; &#x3C;&#x3C; TIME-start &#x3C;&#x3C; &#x22; ms&#x22; &#x3C;&#x3C; endl;
+    
+    double num_strong_fails = 0;
+    
+    for(int i=0;i&#x3C;1000000;i++){
+        if(!a.compare_exchange_strong(b,0)){
+            num_strong_fails++;
+        }
+    }
+    
+    cout &#x3C;&#x3C; &#x22;compare_exchange_strong took &#x22; &#x3C;&#x3C; TIME-start &#x3C;&#x3C; &#x22; ms&#x22; &#x3C;&#x3C; endl;
+    start = TIME;
+    
+    cout &#x3C;&#x3C; &#x22;num_weak_fails &#x22; &#x3C;&#x3C; num_weak_fails &#x3C;&#x3C; endl;
+    cout &#x3C;&#x3C; &#x22;num_strong_fails &#x22; &#x3C;&#x3C; num_strong_fails &#x3C;&#x3C; endl;
+    
+
+
+  return 0;
+}
+</code></pre>
+This program outputs:
+<pre><code>compare_exchange_weak took 20 ms
+compare_exchange_strong took 33 ms
+num_weak_fails 0
+num_strong_fails 0
 </code></pre>
 
 <h2 id="auto">Auto</h2>
